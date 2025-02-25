@@ -1,0 +1,159 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f3f3;
+}
+
+.curso-group {
+    display: contents;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+/* TITULOS H1 e H2 */
+.titulo {
+
+    font-weight: lighter;
+    color: white;
+    display: flex;
+    justify-content: center;
+    background-color: #ccc;
+    padding: 5px;
+}
+
+/* TITULOS H1 e H2 FINAL*/
+
+
+/*CONTAINERS*/
+.container-form {
+    flex-wrap: wrap;
+    gap: 20px;
+    /* Espaçamento entre os elementos */
+}
+
+.container-buttom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem;
+}
+
+/*CONTAINERS FINAL*/
+
+.row,
+.row_cad {
+    display: flex;
+    gap: 5px;
+    margin: 5px;
+}
+.col {
+    width: 100%;
+}
+
+/* INPUTS */
+
+input[type="text"],
+input[type="date"] {
+    height: 35px;
+    width: 20.7rem;
+    border-radius: 5px;
+    border: 1px solid #888;
+    padding: 5px;
+    font-weight: 1.2rem;
+    display: flex;
+}
+
+input[type="reset"],
+.voltar-btn {
+    padding: 20px 40px;
+    border: 1px solid #888;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+input[type="button"] {
+    padding: 20px 40px;
+    border: 1px solid green;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: green;
+    color: white;
+    width: 10rem;
+}
+
+input[type="submit"] {
+    padding: 20px 40px;
+    border: 1px solid green;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: green;
+    color: white;
+    width: 10rem;
+}
+
+/*INPUTS FINAL*/
+
+#botao-add {
+    padding: 20px 40px;
+    border: 1px solid green;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgb(252, 153, 5);
+    color: white;
+}
+
+/* MENU */
+
+.menu ul {
+    display: flex;
+    height: 70px;
+    background-color: black;
+    background-image: linear-gradient(to left, red,black, white);
+    justify-content: end;
+    align-items: center;
+    list-style-type: none;
+    
+
+    
+}
+
+.menu ul li {
+    padding: 15px 20px;
+    color: white;
+}
+
+.menu ul li:hover {
+    background-color: crimson;
+    color: white;
+}
+
+.menu ul a {
+    text-decoration: none;
+    color: black;
+}
+
+/* MENU FINAL*/
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+
+}

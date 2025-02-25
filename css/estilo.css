@@ -1,0 +1,558 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f3f3;
+}
+
+
+
+/* alterado  pelo hitalo*/
+html,
+body {
+    overflow-x: hidden;
+}
+
+.table-container {
+
+    margin-bottom: 15px;
+
+}
+
+.imagem {
+    z-index: 999;
+    margin-left: 10px;
+    margin-top: 50px;
+    position: absolute;
+    width: 50px;
+}
+
+
+
+
+
+/* TITULOS H1 e H2 */
+.titulo {
+
+    font-weight: lighter;
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: center;
+    background-color: #ccc;
+    padding: 5px;
+}
+
+/* TITULOS H1 e H2 FINAL*/
+
+/* TELA LOGIN */
+.logo {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    padding: 1rem;
+}
+
+#logo1,
+#logo2,
+#logo3 {
+
+    padding: 1rem;
+    object-fit: cover;
+    width: 250px;
+}
+
+#logo2 {
+
+    width: 370px;
+
+
+}
+
+.conteudo {
+    background-color: #2b2a2a;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    justify-content: center;
+}
+
+.titulo-login {
+    margin-top: 0%;
+    width: 100%;
+    font-weight: lighter;
+    color: white;
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    padding: 5px;
+}
+
+/* TELA LOGIN FINAL*/
+
+/*CONTAINERS*/
+.container-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    /* Espaçamento entre os elementos */
+}
+
+.filhos-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: grid;
+    grid-template-columns: 350px 350px 350px;
+}
+
+.container-buttom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem;
+}
+
+.curso-group {
+    display: contents;
+}
+
+
+.container-filhos,
+.filho-group {
+    display: contents;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    margin: 10px;
+    margin-left: 170px;
+}
+
+
+
+
+/*CONTAINERS FINAL*/
+
+/*VALIDAÇÃO DOS INPUTS*/
+.validacao0,
+.validacao1,
+.validacao2 {
+    font-size: 11px;
+    color: red;
+    margin: 5px;
+}
+
+.invalid {
+    border: 2px solid red;
+}
+
+/*VALIDAÇÃO DOS INPUTS FINAL*/
+
+/*IMG CADASTRO*/
+
+#thumb {
+    object-fit: cover;
+    width: 150px;
+    height: 150px;
+}
+
+#foto {
+    display: none;
+}
+
+/*FINAL IMG CADASTRO*/
+
+/* TABELA */
+
+table {
+    border: 1px solid #999;
+    width: 95%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    margin-left: 2%;
+}
+
+
+th,
+td {
+    border: 1px solid #999;
+    padding: 3px;
+}
+
+#tdimg,
+#tdimg2 {
+    height: 20px;
+    width: 1px;
+}
+
+
+th {
+    height: 45px;
+    background-color: #555;
+    color: white;
+}
+
+tr:hover {
+    background-color: #ccc;
+}
+
+.search-container {
+
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-top: 1rem;
+    margin-left: 8rem;
+}
+
+/* TABELA FINAL */
+.btns {
+    display: flex;
+}
+
+.row,
+.row_cad {
+    display: flex;
+    gap: 5px;
+    margin: 5px;
+}
+
+.row-select {
+    display: flex;
+    gap: 5px;
+    margin: 10px;
+}
+
+.col {
+    width: 100%;
+}
+
+.col-select {
+    width: 100%;
+}
+
+.col-login {
+    color: white;
+}
+
+/* INPUTS */
+
+input[type="text"],
+input[type="tel"],
+input[type="password"],
+input[type="email"],
+input[type="date"],
+select,
+#cidade,
+#cidadenatal,
+#ufnatal,
+#uf {
+    height: 35px;
+    width: 20.7rem;
+    border-radius: 5px;
+    border: 1px solid #888;
+    padding: 5px;
+    font-weight: 1.2rem;
+    display: flex;
+}
+
+input[type="reset"],
+.voltar-btn {
+    padding: 20px 40px;
+    border: 1px solid #888;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+input[type="button"] {
+    padding: 20px 40px;
+    border: 1px solid green;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: green;
+    color: white;
+    width: 10rem;
+}
+
+input[type="submit"] {
+    padding: 20px 40px;
+    border: 1px solid green;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: green;
+    color: white;
+    width: 10rem;
+}
+
+/*INPUTS FINAL*/
+
+#botao-add {
+    padding: 20px 40px;
+    border: 1px solid green;
+    cursor: pointer;
+    border-radius: 5px;
+    background-color: rgb(252, 153, 5);
+    color: white;
+}
+
+/* MENU */
+
+.menu ul {
+    display: flex;
+    height: 70px;
+    background-color: black;
+    background-image: linear-gradient(to left, red, transparent, white);
+    justify-content: end;
+    align-items: center;
+    list-style-type: none;
+}
+
+.menu ul li {
+    color:white;
+    padding: 15px 20px;
+}
+
+.menu ul li:hover {
+    background-color: crimson;
+    color: white;
+}
+
+.menu ul a {
+    text-decoration: none;
+    color: black;
+}
+
+/* MENU FINAL*/
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+    width: 100%;
+
+}
+
+.rodape {
+    width: 100%;
+    font-weight: lighter;
+    color: white;
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    padding: 5px;
+    margin-top: auto;
+}
+
+.popup {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+.popup img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+
+
+.pwa {
+    position: fixed;
+    /* Fixa a posição na tela */
+    z-index: 9999;
+    /* Garante que o elemento fique sobre outros */
+    top: 10%;
+    /* Distância do topo */
+    left: 50%;
+    /* Centraliza horizontalmente */
+    transform: translateX(-50%);
+    /* Ajusta a posição horizontalmente */
+    width: 80%;
+    /* Largura da div */
+    height: 80%;
+    /* Altura da div */
+    background-color: #ffffff;
+    /* Cor de fundo branco */
+    border: 3px solid #0c0c0c;
+    /* Borda escura */
+    border-radius: 12px;
+    /* Borda com arredondamento suave */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* Sombra suave para dar profundidade */
+    display: flex;
+    /* Flexbox para organizar conteúdo */
+    flex-direction: column;
+    /* Organiza os itens na vertical */
+    align-items: center;
+    /* Centraliza horizontalmente os itens */
+    justify-content: center;
+    /* Centraliza verticalmente os itens */
+    padding: 20px;
+    /* Espaçamento interno */
+    transition: all 0.3s ease;
+    /* Transições suaves para interações */
+}
+
+.pwa #addToHomeScreen {
+    position: absolute;
+    margin-left: 18%;
+    top: 70%;
+    width: 60%;
+    background-color: #007bff;
+    /* Cor de fundo azul */
+    color: #fff;
+    /* Cor do texto branco */
+    font-size: 16px;
+    /* Tamanho da fonte */
+    font-weight: bold;
+    /* Deixa o texto em negrito */
+    border: none;
+    /* Remove bordas */
+    border-radius: 8px;
+    /* Arredonda os cantos */
+    padding: 10px 20px;
+    /* Espaçamento interno */
+    cursor: pointer;
+    /* Mostra o ponteiro como uma mão */
+    transition: all 0.3s ease;
+    /* Animações suaves em hover */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    /* Sombra leve */
+}
+
+.pwa #addToHomeScreen:hover {
+    background-color: #0056b3;
+    /* Cor de fundo mais escura no hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+    /* Aumenta a sombra */
+    transform: scale(1.05);
+    /* Leve zoom */
+}
+
+.pwa #addToHomeScreen:active {
+    background-color: #003d80;
+    /* Cor ainda mais escura ao clicar */
+    transform: scale(0.95);
+    /* Efeito de "pressionar" */
+}
+
+.pwa #fechar {
+    margin-left: 95%;
+    background-color: #dc3545;
+    /* Cor de fundo vermelha */
+    color: #fff;
+    /* Cor do texto branco */
+    border: none;
+    /* Remove as bordas */
+    border-radius: 50%;
+    /* Botão redondo */
+    width: 40px;
+    /* Largura do botão */
+    height: 40px;
+    /* Altura do botão */
+    display: flex;
+    /* Usa flexbox para centralizar o conteúdo */
+    align-items: center;
+    /* Centraliza o ícone/ texto verticalmente */
+    justify-content: center;
+    /* Centraliza o ícone/ texto horizontalmente */
+    cursor: pointer;
+    /* Cursor de mão para indicar que é clicável */
+    font-size: 18px;
+    /* Tamanho do texto */
+    font-weight: bold;
+    /* Deixa o texto em negrito */
+    transition: background-color 0.3s, transform 0.3s;
+    /* Animações suaves */
+}
+
+.pwa #fechar:hover {
+    background-color: #c82333;
+    /* Cor de fundo mais escura no hover */
+    transform: scale(1.1);
+    /* Efeito de zoom suave ao passar o mouse */
+}
+
+.pwa #fechar:active {
+    background-color: #bd2130;
+    /* Cor ainda mais escura no clique */
+    transform: scale(0.95);
+    /* Efeito de pressionamento */
+}
+
+@media screen and (max-width: 896px) {
+
+    .conteudo {
+        align-items: center;
+    }
+
+    #logo1,
+    #logo2,
+    #logo3 {
+        width: 35vw;
+    }
+
+    .container {
+        display: block;
+        margin: 0 2em 0 1em;
+    }
+
+    .container-form {
+        display: block;
+    }
+
+    #thumb {
+        display: none;
+    }
+
+    .container-buttom {
+        display: flex;
+    }
+
+
+
+    .titulo-login {
+        font-size: 15px;
+    }
+
+    #search {
+        margin-left: 10px;
+    }
+
+    .search-container {
+        margin-left: 0.1rem;
+    }
+
+    .rodape {
+
+        font-size: 10px;
+    }
+
+    .voltar-btn {
+    }
+
+    input[type="reset"],
+    .voltar-btn {
+        padding: 10px 10px;
+    }
+
+    input[type="button"] {
+        padding: 10px 10px;
+    }
+}

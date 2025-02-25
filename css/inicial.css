@@ -1,0 +1,90 @@
+body{
+    background-color: #29292a;
+    overflow-y: hidden;
+}
+.titulo-login {
+    top: 0%;
+    width: 100%;
+    position: fixed;
+    font-weight: lighter;
+    color: white;
+    display: flex;
+    justify-content: center;
+    background-color:black;
+    padding: 5px;
+}
+.menuicon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+
+}
+
+.menuicon ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centraliza os itens */
+    gap: 20px;
+}
+
+.menuicon li {
+    display: inline-block;
+    width: 150px; /* Define uma largura fixa para cada item */
+    text-align: center;
+}
+
+.menuicon a {
+    text-decoration: none;
+    color: #333;
+    font-size: 16px;
+    display: flex;
+    flex-direction: column; /* Alinha ícone e texto verticalmente */
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    transition: all 0.3s ease;
+    gap: 8px;
+    width: 120px; /* Ajuste a largura do botão */
+    height: 120px; /* Ajuste a altura do botão */
+}
+
+.menuicon a:hover {
+    background-color: #0c0c0c; /* Cor de fundo ao passar o mouse */
+    color: #fff; /* Cor do texto ao passar o mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Aumenta a sombra no hover */
+    transform: translateY(-4px); /* Efeito de "elevação" no hover */
+}
+
+.menuicon a i {
+    font-size: 28px; /* Tamanho maior para o ícone */
+}
+
+.menuicon a:active {
+    transform: translateY(2px); /* Efeito de clique */
+}
+
+/* Adiciona um fundo ao menuicon para melhorar a visibilidade em telas claras */
+.menuicon ul {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 896px) {
+    .menuicon {
+        padding: 0;
+        overflow-y:scroll; 
+    }
+
+    .titulo-login {
+        font-size: 10px;
+    }
+}
