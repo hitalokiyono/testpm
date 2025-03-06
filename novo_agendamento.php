@@ -171,7 +171,7 @@ button:hover {
         <label for="unidades">Unidades</label>
         <div class="input-wrapper2">
             <input type="checkbox" name="unidades[]" value="all" id="todos" onclick="marcarTodos(this)"> Todos
-            <input type="checkbox" name="unidades[]" value="1" id="unidade1" class="unidade"> soldado
+            <input type="checkbox" name="unidades[]" value="0" id="unidade1" class="unidade"> soldado
             <input type="checkbox" name="unidades[]" value="2" id="unidade2" class="unidade"> p1
             <input type="checkbox" name="unidades[]" value="3" id="unidade3" class="unidade"> p2
             <input type="checkbox" name="unidades[]" value="4" id="unidade4" class="unidade"> p3

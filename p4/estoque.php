@@ -25,7 +25,7 @@ else if($_SESSION["permissao"] < 4){
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="../css/estilo.css">
     <?php
-                require_once("../menu.php");
+                require_once("./menu.php");
                 ?>
 
     <link rel="stylesheet" href="../css/inicial.css">
@@ -34,7 +34,6 @@ else if($_SESSION["permissao"] < 4){
 <body>
 
 <div class="menuicon">
- 
 <ul>
 <li> 
   <a href="./material.php"><i class="fas fa-box"></i> MATERIAL</a>

@@ -16,7 +16,7 @@ try {
                 // Verifica se foi marcado "todos" ou unidades específicas
                 if (in_array('all', $unidades)) {
                     // Inserir para todas as unidades
-                    $postos = [1, 2, 3, 4, 5];
+                    $postos = [0, 2, 3, 4, 5];
                 } else {
                     // Inserir para as unidades específicas selecionadas
                     $postos = $unidades;
