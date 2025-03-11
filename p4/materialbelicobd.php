@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['tipo_tabela'])) {
         die("Erro: Tipo de tabela não informado.");
     }
-
+    var_dump($_POST);
     $tabelas = [
         1 => "p4_armas",
         2 => "p4_coletes",
@@ -15,7 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         4 => "p4_municoes",
         5 => "p4_taser",
         6 => "p4_algemas",
-        7 => "p4_ht"
+        7 => "p4_ht",
+        8 => "p4_material",
+          9 => "p4_viaturas"
     ];
 
     $tipoTabela = $_POST['tipo_tabela'];
@@ -86,8 +88,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $conexao->commit();
+        if( $tipoTabela === "9"){
+        header("location:./motomecmenu.php");
+        }else{
         header("location:./estoque.php");
-    } catch (Exception $e) {
+    }
+ } catch (Exception $e) {
         $conexao->rollBack();
         echo "Erro: " . $e->getMessage();
     }

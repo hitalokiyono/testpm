@@ -230,13 +230,16 @@ function fecharPopup2() {
                 echo '<li><a href="./visualizarfilhomenu.php"><i class="fas fa-child"></i> VISUALIZAR FILHO</a></li>';
                 echo '<li><a href="mailto:testcontrolelocalhost@gmail.com?subject=Comunicação com o Administrador" target="_blank"><i class="fas fa-paper-plane"></i> COMUNICAR ADMINISTRADOR</a></li>';
             } else if ($_SESSION['permissao'] === 5) {
-                echo '<li><a href="./cadastrocursomenu.php"><i class="fas fa-clipboard-list"></i> VISUALIZAR CURSO</a></li>';
                 echo '<li><a href="./email.php"><i class="fas fa-user-plus"></i> CADASTRAR</a></li>';
+                echo '<li><a href="./cadastrocursomenu.php"><i class="fas fa-clipboard-list"></i> VISUALIZAR CURSO</a></li>';
                 echo '<li><a href="./visualizarfilhomenu.php"><i class="fas fa-child"></i> VISUALIZAR FILHO</a></li>';
                 echo '<li><a href="https://mail.google.com/mail/u/0/#inbox"><i class="fas fa-envelope-open-text"></i>Email</a></li>';
                 echo '<li><a href="./visualizacao.php"><i class="fas fa-eye"></i> VISUALIZAR</a></li>';
                 echo '<li><a href="./relatorios.php"><i class="fas fa-chart-pie"></i> RELATÓRIOS</a></li>';
                 echo '<li><a href="./p4/estoque.php"><i class="fas fa-warehouse"></i> ESTOQUE</a></li>';
+             echo'<li><a href="./p4/motomecmenu.php"><i class="fas fa-car"></i> MOTOMEC</a></li>';
+             echo '<li><a href="./p4/romaneiomenu.php"><i class="fas fa-list"></i> Alocação</a></li>';
+
             }
             
             ?>

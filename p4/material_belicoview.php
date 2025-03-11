@@ -66,8 +66,13 @@ if (isset($_POST['tipo_tabela'])) {
             continue;
         }
 
-        echo "<label for='$nomeCampo'>$nomeCampo</label>";
 
+        if( $tabelas[$tipoTabela] === "p4_municoes" && $nomeCampo === 'numerodepatrimonio' ){
+            echo "<label for='$nomeCampo'>lote</label>";
+        }
+        else{
+        echo "<label for='$nomeCampo'>$nomeCampo</label>";
+        }
         if ($nomeCampo === 'idModelo') {
             echo "<select name='$nomeCampo' id='$nomeCampo'>";
             echo "<option value=''>Selecione um modelo</option>";

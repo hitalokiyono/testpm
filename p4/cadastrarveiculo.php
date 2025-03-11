@@ -143,7 +143,7 @@ body,html {
 
 <?php require_once("./menu.php"); ?>
 
-<h1 class="titulo">Cadastro de Material</h1>
+<h1 class="titulo">Cadastro de veiculo</h1>
 
 <div id="container">
     <div id="formulario">
@@ -153,8 +153,8 @@ body,html {
             require_once("../conexao/conexao.php");
 
             // Nome da tabela fixa
-            $nomeTabela = "p4_material";
-            $tipoTabela = 8;
+            $nomeTabela = "p4_viaturas";
+            $tipoTabela = 9;
             // Buscar os modelos automaticamente pela categoria
             $sqlModelos = "SELECT idModelo, modelo FROM p4_modelos WHERE categoria = :categoria";
             $stmtModelos = $conexao->prepare($sqlModelos);
@@ -172,6 +172,12 @@ body,html {
             $stmtStatus->execute();
             $statusList = $stmtStatus->fetchAll(PDO::FETCH_ASSOC);
 
+
+            $sqlmodalidade = "SELECT idModalidades, modalidade FROM p4_modalidades";
+            $stmtmodalidade = $conexao->prepare($sqlmodalidade);
+            $stmtmodalidade->execute();
+            $modalidades = $stmtmodalidade->fetchAll(PDO::FETCH_ASSOC);
+            
             // Buscar locais de compra com JOIN para trazer os nomes completos
             $sqlLocComp = "SELECT lc.idLocComp, l.descricaolocal, c.descricaocomplemento 
                            FROM p4_localcomplemento lc
@@ -189,7 +195,7 @@ body,html {
             $campos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
             echo "<form method='POST' action='./materialbelicobd.php' enctype='multipart/form-data'>";
-            echo "<input type='hidden' name='tipo_tabela' value='8'>"; // Valor fixo para a tabela p4_material
+            echo "<input type='hidden' name='tipo_tabela' value='9'>"; // Valor fixo para a tabela p4_material
             $primeiroCampo = true;
             foreach ($campos as $campo) {
                 $nomeCampo = $campo['Field'];
@@ -205,6 +211,13 @@ body,html {
                     echo "<option value=''>Selecione um modelo</option>";
                     foreach ($modelos as $modelo) {
                         echo "<option value='{$modelo['idModelo']}'>{$modelo['modelo']}</option>";
+                    }
+                    echo "</select><br>";
+                }elseif ($nomeCampo === 'modalidade') {
+                    echo "<select name='$nomeCampo' id='$nomeCampo'>";
+                    echo "<option value=''>Selecione a modalidade</option>";
+                    foreach ($modalidades as $modalidade) {
+                        echo "<option value='{$modalidade['idModalidades']}'>{$modalidade['modalidade']}</option>";
                     }
                     echo "</select><br>";
                 } else {

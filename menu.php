@@ -7,7 +7,6 @@
         if ($_SESSION['permissao']  === 5) {
             echo '<a href="./email.php"><li>CADASTRAR</li></a>';
             echo '<a href="./visualizacao.php"><li>VISUALIZAR</li></a>';
-            echo '<a href="./visualizacao.php"><li>PERMISSÕES</li></a>';
         }
         ?>
         <a href="./inicial.php">

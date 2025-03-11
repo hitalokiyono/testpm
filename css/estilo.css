@@ -74,7 +74,6 @@ body {
 
 
 }
-
 .conteudo {
     background-color: #2b2a2a;
     display: flex;
@@ -102,6 +101,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
+
     /* Espaçamento entre os elementos */
 }
 
