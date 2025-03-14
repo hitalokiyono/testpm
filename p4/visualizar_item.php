@@ -135,6 +135,12 @@ $stmt->execute();
 // Recupera o resultado
 $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+$_SESSION['dados_exportacao'] = $resultado;
+
 if ($resultado) {
 
 } else {
@@ -155,9 +161,7 @@ if ($resultado) {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" href="../css/estilo.css">
     <link rel="stylesheet" href="../css/inicial.css">
-
     <?php require_once("./menu.php"); ?>
-
     <style>
         /* Estilo para ocultar o restante da página durante a impressão */
         @media print {
@@ -175,17 +179,13 @@ if ($resultado) {
                 width: 100%;
             }
 
-           
- 
-
         }
 
-
         @media print {
-    .foto-campo {
-        display: none !important;
-    }
-}
+            .foto-campo {
+                display: none !important;
+            }
+        }
 
         /* Foto inicialmente escondida na tela */
         .print-photo {
@@ -197,12 +197,10 @@ if ($resultado) {
             background-color: rgb(238, 241, 239);
         }
 
+        table{
+            margin-left: 1%;
+        }
 
-
-table{
-    margin-left: 1%;
-    
-}
         .container {
             display: contents;
             width: 100%; /* Tamanho automático */
@@ -212,14 +210,9 @@ table{
             padding: 0; /* Removendo padding */
         }
 
-
         .table_sccs {
-            width: 90%;}
-
-          
-    
-
-
+            width: 90%;
+        }
     </style>
 </head>
 <body>
@@ -228,21 +221,21 @@ table{
 
         <!-- Div para exibir a tabela e a foto durante a impressão -->
         <div class="printable">
-        <table class="table table-bordered" style="width: 98%;">
+            <table class="table table-bordered" style="width: 98%;">
                 <tbody>
                     <?php
-                foreach ($resultado as $campo => $valor) {
-                    // Pula campos que começam com 'id' ou são exatamente 'Categoria'
-                    if (stripos($campo, 'id') === 0 || strtolower($campo) === "categoria") {
-                        continue;  
+                    foreach ($resultado as $campo => $valor) {
+                        // Pula campos que começam com 'id' ou são exatamente 'Categoria'
+                        if (stripos($campo, 'id') === 0 || strtolower($campo) === "categoria") {
+                            continue;  
+                        }
+                        if ($campo === 'foto') continue; // Pula o campo foto por enquanto
+                        echo "<tr><th>" . ucfirst($campo) . "</th><td>" . htmlspecialchars($valor) . "</td></tr>";
                     }
-                    if ($campo === 'foto') continue; // Pula o campo foto por enquanto
-                    echo "<tr><th>" . ucfirst($campo) . "</th><td>" . htmlspecialchars($valor) . "</td></tr>";
-                }
-                
-                if (isset($resultado['foto'])) {
-                    echo "<tr class='foto-campo'><th>Foto</th><td><button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#fotoModal'>Ver Foto</button></td></tr>";
-                }
+
+                    if (isset($resultado['foto'])) {
+                        echo "<tr class='foto-campo'><th>Foto</th><td><button class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#fotoModal'>Ver Foto</button></td></tr>";
+                    }
                     ?>
                 </tbody>
             </table>
@@ -256,11 +249,12 @@ table{
         </div>
 
         <!-- Botões no final -->
-        <div class="text-begin" style= margin-left:2%;>
+        <div class="text-begin" style="margin-left:2%;">
             <button onclick="history.back();" class="btn btn-secondary">Voltar</button>
             <a href="relocar.php" class="btn btn-warning">Relocar</a>
             <button onclick="imprimirComFoto();" class="btn btn-info">Imprimir</button>
             <a href="editar.php" class="btn btn-success">Editar</a>
+            <a href="exce.php" class="btn btn-primary">Exportar para Excel</a> <!-- Botão de exportação -->
         </div>
     </div>
 
@@ -280,39 +274,35 @@ table{
     </div>
 
     <script>
+        function imprimirComFoto() {
+            var fotoDiv = document.querySelector('.print-photo');
+            var fotoCampo = document.querySelector('.foto-campo'); // Linha da foto
 
+            // Verifica se o campo foto existe antes de tentar esconder
+            if (fotoCampo) {
+                fotoCampo.style.display = 'none'; // Esconde a linha da foto
+            }
 
-    function imprimirComFoto() {
-    var fotoDiv = document.querySelector('.print-photo');
-    var fotoCampo = document.querySelector('.foto-campo'); // Linha da foto
-    
-    // Verifica se o campo foto existe antes de tentar esconder
-    if (fotoCampo) {
-        fotoCampo.style.display = 'none'; // Esconde a linha da foto
-    }
+            // Verifica se a foto existe antes de tentar manipulá-la
+            if (fotoDiv) {
+                fotoDiv.style.display = 'block'; // Exibe a foto na impressão
+            }
 
-    // Verifica se a foto existe antes de tentar manipulá-la
-    if (fotoDiv) {
-        fotoDiv.style.display = 'block'; // Exibe a foto na impressão
-    }
+            // Atraso de 500ms para garantir que a foto seja visível antes da impressão
+            setTimeout(function() {
+                window.print(); // Imprime a página
+            }, 500);
 
-    // Atraso de 500ms para garantir que a foto seja visível antes da impressão
-    setTimeout(function() {
-        window.print(); // Imprime a página
-    }, 500);
-
-    // Após a impressão, a foto será escondida novamente
-    setTimeout(function() {
-        if (fotoDiv) {
-            fotoDiv.style.display = 'none'; // Esconde a foto novamente após a impressão
+            // Após a impressão, a foto será escondida novamente
+            setTimeout(function() {
+                if (fotoDiv) {
+                    fotoDiv.style.display = 'none'; // Esconde a foto novamente após a impressão
+                }
+                if (fotoCampo) {
+                    fotoCampo.style.display = ''; // Restaura a linha Foto na página
+                }
+            }, 1000); // Foto é escondida após 1 segundo
         }
-        if (fotoCampo) {
-            fotoCampo.style.display = ''; // Restaura a linha Foto na página
-        }
-    }, 1000); // Foto é escondida após 1 segundo
-}
-
-
     </script>
 </body>
 </html>
