@@ -38,9 +38,15 @@ else if($_SESSION["permissao"] < 4){
 <li> 
   <a href="./material.php"><i class="fas fa-box"></i> MATERIAL</a>
 </li>
+
+<li> 
+  <a href="./cadastrarromaneio.php"><i class="fas fa-tshirt"></i> cadastrar romaneio</a>
+</li>
+
 <li>
   <a href="./materialbelico.php"><i class="fas fa-shield-alt"></i> MATERIAL BÉLICO</a>
 </li>
+
 <li>
   <a href="./inventario.php"><i class="fas fa-clipboard-list"></i> INVENTÁRIO</a>
 </li>

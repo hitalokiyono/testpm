@@ -112,6 +112,18 @@ try {
                         INNER JOIN p4_marcas AS ma ON ma.idMarca = mo.idMarca
                         INNER JOIN p4_tipos AS ti ON ti.id = mo.idTipo',
             'where' => 'viaturas.numerodepatrimonio = :idpatrimonio'
+        ],
+        'p4_romaneio' => [
+            'fields' => 'inv.id, inv.numerodepatrimonio, inv.idLocComp, inv.idStatus, inv.idTipo_tabela, rom.*, mo.*, st.*, lo.*, ma.*, ti.*, loc.*, locc.*',
+            'joins' => 'INNER JOIN p4_romaneio AS rom ON rom.numerodepatrimonio = inv.numerodepatrimonio
+                        INNER JOIN p4_modelos AS mo ON mo.idModelo = rom.idModelo
+                        INNER JOIN p4_status AS st ON st.idStatus = inv.idStatus
+                        INNER JOIN p4_localcomplemento AS lo ON lo.idLocComp = inv.idLocComp
+                        INNER JOIN p4_local AS loc ON loc.idLocal = lo.idLocal
+                        INNER JOIN p4_complemento AS locc ON locc.idComplemento = lo.idComplemento
+                        INNER JOIN p4_marcas AS ma ON ma.idMarca = mo.idMarca
+                        INNER JOIN p4_tipos AS ti ON ti.id = mo.idTipo',
+            'where' => 'rom.numerodepatrimonio = :idpatrimonio'
         ]
 
     ];

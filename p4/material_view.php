@@ -23,7 +23,7 @@ try {
         INNER JOIN p4_inventario AS inv ON inv.id = con.idInventario
         INNER JOIN p4_status AS sta ON sta.idStatus = inv.idStatus
         INNER JOIN p1 ON p1.id = con.idPm
-        INNER JOIN p4_coletes AS c ON c.numerodepatrimonio = inv.numerodepatrimonio
+        INNER JOIN p4_romaneio AS c ON c.numerodepatrimonio = inv.numerodepatrimonio
         INNER JOIN p4_modelos AS mo ON mo.idModelo = c.idModelo
         INNER JOIN p4_localcomplemento AS lo ON lo.idLocComp = inv.idLocComp
         INNER JOIN p4_local AS loc ON loc.idLocal = lo.idLocal
@@ -40,18 +40,31 @@ try {
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
     elseif (isset($_POST['inventario_id'])) {
+  
+    
+        $con = trim($_POST['id_controle']);
+
         $att = trim($_POST['inventario_id']);
+    
+    $comando =" 
+        UPDATE `p4_controleinventario` 
+        SET `dtSaida` = NOW() 
+        WHERE `id_controle` = :con;
+        ";
+        $stmt = $conexao->prepare($comando);
+        $stmt->bindParam(":con", $con, PDO::PARAM_STR);
+        $stmt->execute();
+
         $comandoSQL = "
         UPDATE p4_inventario SET idStatus = 2 WHERE p4_inventario.id = :att;               
         ";
-
         $stmt = $conexao->prepare($comandoSQL);
         $att = "$att"; // Permite buscar por parte do RE
         $stmt->bindParam(":att", $att, PDO::PARAM_STR);
         $stmt->execute();
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } 
-    
+    exit();
+    }    
     else {
         $comandoSQL = "
         SELECT 
@@ -72,7 +85,7 @@ try {
         INNER JOIN p4_inventario AS inv ON inv.id = con.idInventario
         INNER JOIN p4_status AS sta ON sta.idStatus = inv.idStatus
         INNER JOIN p1 ON p1.id = con.idPm
-        INNER JOIN p4_coletes AS c ON c.numerodepatrimonio = inv.numerodepatrimonio
+        INNER JOIN p4_romaneio AS c ON c.numerodepatrimonio = inv.numerodepatrimonio
         inner join p4_tamanhos  as tam  on  tam.idTamanhos  =  c.id_tamanho  
         INNER JOIN p4_modelos AS mo ON mo.idModelo = c.idModelo
         INNER JOIN p4_localcomplemento AS lo ON lo.idLocComp = inv.idLocComp
@@ -110,8 +123,9 @@ try {
             // Exibir os botões apenas se o item não estiver operando
             if ($row['estado'] == 'Operando') {
                 echo "<td>
-                        <button class='btn btn-warning' onclick='darBaixa(" . $row['inventario_id'] . ")'>Dar Baixa</button>
-                      </td>";
+                <button class='btn btn-warning' onclick='darBaixa(" . $row["inventario_id"] . ", " . $row["id_controle"] . ")'>Dar Baixa</button>
+              </td>";
+        
             } else {
                 echo "<td></td>";
             }

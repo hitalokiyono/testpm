@@ -17,7 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         6 => "p4_algemas",
         7 => "p4_ht",
         8 => "p4_material",
-          9 => "p4_viaturas"
+        9 => "p4_viaturas",
+        10 => "p4_romaneio"
     ];
 
     $tipoTabela = $_POST['tipo_tabela'];
@@ -90,6 +91,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conexao->commit();
         if( $tipoTabela === "9"){
         header("location:./motomecmenu.php");
+
+
+        
         }else{
         header("location:./estoque.php");
     }

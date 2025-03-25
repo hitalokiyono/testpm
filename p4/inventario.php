@@ -165,7 +165,9 @@ $tabelas = [
     6 => "p4_algemas",
     7 => "p4_ht",
     8 => "p4_material",
-    9 => "p4_viaturas"
+    9 => "p4_viaturas",
+    10 => "p4_romaneio",
+    
 ];
 
 // Consulta os itens do inventário

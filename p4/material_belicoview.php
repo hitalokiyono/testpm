@@ -28,7 +28,7 @@ if (isset($_POST['tipo_tabela'])) {
     $stmtModelos->execute();
     $modelos = $stmtModelos->fetchAll(PDO::FETCH_ASSOC);
 
-    $sqlTamanhos = "SELECT idTamanhos, descricao FROM p4_tamanhos";
+    $sqlTamanhos = "SELECT idTamanhos, descricao_tamanho FROM p4_tamanhos";
     $stmtTamanhos = $conexao->prepare($sqlTamanhos);
     $stmtTamanhos->execute();
     $tamanhos = $stmtTamanhos->fetchAll(PDO::FETCH_ASSOC);
@@ -84,7 +84,7 @@ if (isset($_POST['tipo_tabela'])) {
             echo "<select name='$nomeCampo' id='$nomeCampo'>";
             echo "<option value=''>Selecione um tamanho</option>";
             foreach ($tamanhos as $tamanho) {
-                echo "<option value='{$tamanho['idTamanhos']}'>{$tamanho['descricao']}</option>";
+                echo "<option value='{$tamanho['idTamanhos']}'>{$tamanho['descricao_tamanho']}</option>";
             }
             echo "</select><br>";
         }       elseif ($nomeCampo === 'foto') {

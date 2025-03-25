@@ -142,7 +142,7 @@ body,html {
 <body>
 
     <?php require_once("./menu.php"); ?>
-    <?php require_once("./material_view.php"); ?>
+  
 
     <h1 class="titulo">Cadastro de Materiais Bélicos</h1>
 
