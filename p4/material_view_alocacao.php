@@ -1,6 +1,8 @@
 <?php
 require_once("../conexao/conexao.php");
-
+if (!isset($_SESSION)) {
+    session_start();
+}
 try {
     $dados = [];
     
@@ -8,6 +10,7 @@ try {
         $re = trim($_POST['re']);
         $comandoSQL = "
         SELECT 
+           inv.id AS inventario_id, 
             con.*, 
             inv.*, 
             p1.*, 
@@ -38,33 +41,7 @@ try {
         $stmt->bindParam(":re", $re, PDO::PARAM_STR);
         $stmt->execute();
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
-    elseif (isset($_POST['inventario_id'])) {
-  
-    
-        $con = trim($_POST['id_controle']);
-
-        $att = trim($_POST['inventario_id']);
-    
-    $comando =" 
-        UPDATE `p4_controleinventario` 
-        SET `dtSaida` = NOW() 
-        WHERE `id_controle` = :con;
-        ";
-        $stmt = $conexao->prepare($comando);
-        $stmt->bindParam(":con", $con, PDO::PARAM_STR);
-        $stmt->execute();
-
-        $comandoSQL = "
-        UPDATE p4_inventario SET idStatus = 2 WHERE p4_inventario.id = :att;               
-        ";
-        $stmt = $conexao->prepare($comandoSQL);
-        $att = "$att"; // Permite buscar por parte do RE
-        $stmt->bindParam(":att", $att, PDO::PARAM_STR);
-        $stmt->execute();
-        $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    exit();
-    }    
+    }   
     else {
         $comandoSQL = "
         SELECT 
@@ -109,11 +86,12 @@ try {
           
             echo "<tr>
                     <td class='hidden'>{$row['id']}</td>
+                      <td>{$row['NomeCompleto']}</td>
+                        <td>{$row['RE']}</td>
+                         <td>{$row['modelo']}</td>
                     <td>{$row['numerodepatrimonio']}</td>
-                    <td>{$row['RE']}</td>
                     <td>{$row['estado']}</td>
                     <td>{$row['dtEntrada']}</td>";
-            
             if ($row['dtSaida'] === null) {
                 echo "<td>em operação</td>"; // Se não houver data de saída, deixa a célula em branco
             } else {
@@ -123,14 +101,20 @@ try {
             // Exibir os botões apenas se o item não estiver operando
             if ($row['estado'] == 'Operando' && $row['dtSaida'] == null  &&  $_SESSION["permissao"] == 5 ) {
                 echo "<td>
-                <button class='btn btn-warning' onclick='darBaixa(" . $row["inventario_id"] . ", " . $row["id_controle"] . ")'>Dar Baixa</button>
+                 
+                
+                
+                   <button class='btn btn-warning' onclick='darBaixa(" . $row["inventario_id"] . ", " . $row["id_controle"] . ")'>Dar Baixa</button>
               </td>";
-        
+                }
+              elseif ($row['estado'] == 'Baixado' &&  $_SESSION["permissao"] == 5 ) {
+                echo "<td>      
+              <button class='btn btn-success' onclick='alocar()'>Alocar item</button>
+
+              </td>";
             } else {
                 echo "<td></td>";
-            }
-            
-            
+            } 
             echo "</tr>";
         }
     } else {

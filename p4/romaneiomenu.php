@@ -38,11 +38,9 @@ else if($_SESSION["permissao"] < 4){
     <li>
         <a href="./romaneio.php"><i class="fas fa-truck-loading"></i> Romaneio PM</a>
     </li>
+
     <li>
-        <a href="./alocar.php"><i class="fas fa-cogs"></i> Alocar Item</a>
-    </li>
-    <li>
-        <a href="./consultar.php"><i class="fas fa-search"></i> Consultar Item PM</a>
+        <a href="./consultarpm.php"><i class="fas fa-search"></i> Consultar Item PM</a>
     </li>
     <li>
         <a href="../inicial.php"><i class="fas fa-sign-out-alt"></i> Sair</a>

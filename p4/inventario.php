@@ -155,7 +155,6 @@ body,html {
 <?php
 require_once("../conexao/conexao.php");
 
-// Tabelas associadas aos tipos
 $tabelas = [
     1 => "p4_armas",
     2 => "p4_coletes",
@@ -169,8 +168,6 @@ $tabelas = [
     10 => "p4_romaneio",
     
 ];
-
-// Consulta os itens do inventário
 $sql = "SELECT id, numerodepatrimonio, idStatus, idTipo_tabela FROM p4_inventario";
 $stmt = $conexao->prepare($sql);
 $stmt->execute();

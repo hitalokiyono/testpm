@@ -162,11 +162,7 @@ body,html {
             $stmtModelos->execute();
             $modelos = $stmtModelos->fetchAll(PDO::FETCH_ASSOC);
 
-            $sqlTamanhos = "SELECT idTamanhos, descricao FROM p4_tamanhos";
-            $stmtTamanhos = $conexao->prepare($sqlTamanhos);
-            $stmtTamanhos->execute();
-            $tamanhos = $stmtTamanhos->fetchAll(PDO::FETCH_ASSOC);
-
+     
             $sqlStatus = "SELECT idStatus, estado FROM p4_status";
             $stmtStatus = $conexao->prepare($sqlStatus);
             $stmtStatus->execute();
@@ -200,7 +196,7 @@ body,html {
             foreach ($campos as $campo) {
                 $nomeCampo = $campo['Field'];
 
-                if ($primeiroCampo) {
+                if ($primeiroCampo || $nomeCampo == 'motivobaixa' ) {
                     $primeiroCampo = false;
                     continue;
                 }
