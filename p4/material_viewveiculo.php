@@ -67,8 +67,8 @@ if (count($dados) > 0) {
 
         if ($_SESSION["permissao"] == 5) {
             echo "<td>
-                    <input type='checkbox' class='selecionarPM' id='check-{$row['id']}' value='{$row['id']}'>
-                  </td>
+        <input type='checkbox' class='selecionarPM' id='check-" . $row['id'] . "' value='" . $row['id'] . "'>
+      </td>
                   <td>
                     <button class='btn btn-info marcar-responsavel' onclick='marcarResponsavel({$row['id']})'>Marcar</button>
                   </td>";

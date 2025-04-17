@@ -45,7 +45,7 @@ try {
         $con = trim($_POST['id_controle']);
 
         $att = trim($_POST['inventario_id']);
-    
+
     $comando =" 
         UPDATE `p4_controleinventario` 
         SET `dtSaida` = NOW() 
@@ -63,6 +63,33 @@ try {
         $stmt->bindParam(":att", $att, PDO::PARAM_STR);
         $stmt->execute();
         $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    exit();
+    }    
+    elseif (isset($_POST['inventario_id2'])) {
+  
+        $idinventario = $_POST["inventario_id2"];
+        
+            $updateSQL = "
+                UPDATE p4_controleinventario
+                SET dtSaida = NOW()
+                WHERE idInventario = :idinventario
+                AND dtSaida IS NULL
+                ORDER BY dtEntrada DESC
+                LIMIT 1
+            ";
+            $stmt = $conexao->prepare($updateSQL);
+            $stmt->bindParam(':idinventario', $idinventario, PDO::PARAM_INT);
+            $stmt->execute();
+
+            $att = $idinventario;
+            $comandoSQL = "
+            UPDATE p4_inventario SET idStatus = 2 WHERE p4_inventario.id = :att;               
+            ";
+            $stmt = $conexao->prepare($comandoSQL);
+            $att = "$att"; // Permite buscar por parte do RE
+            $stmt->bindParam(":att", $att, PDO::PARAM_STR);
+            $stmt->execute();
+            $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
     exit();
     }    
     else {

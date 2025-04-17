@@ -49,7 +49,7 @@ if (!isset($_SESSION)) {
                     </tr>
                 </thead>
                 <tbody id="tabelaResultados">
-                    <?php require_once("./material_view_pm.php"); ?>
+                    <?php require_once("./material_view_alocacao.php"); ?>
                 </tbody>
             </table>
         </div>
@@ -85,7 +85,7 @@ if (!isset($_SESSION)) {
         }
         
         function darBaixa(inventario_id, id_controle) {       
-
+console.log(inventario_id);
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "./material_view.php", true);
     xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -97,8 +97,7 @@ if (!isset($_SESSION)) {
             document.getElementById("tabelaResultados").innerHTML = xhr.responseText;
         }
     };
-    let params = "inventario_id=" + encodeURIComponent(inventario_id) + 
-                 "&id_controle=" + encodeURIComponent(id_controle);
+    let params = "inventario_id2=" + encodeURIComponent(inventario_id);
 
     xhr.send(params);
 }

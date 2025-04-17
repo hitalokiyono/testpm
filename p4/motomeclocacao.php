@@ -236,19 +236,46 @@ if (!isset($_SESSION)) {
                 <tr>
                     <td><?= $i ?></td>
                     <td class='direita'>
-                        <button class='btn btn-primary marcar-setor' onclick='marcarmaterias(<?= $i ?>)'>Marcar</button>
+                        <button class='btn btn-primary marcar-setor' onclick='marcarsetor(<?= $i ?>)'>Marcar</button>
                     </td>
                 </tr>
             <?php endfor; ?>
         </tbody>
     </table>
     <?php if ($_SESSION["permissao"] == 5): ?>
-        <p><strong>material selecionada:</strong> <span id="id_funcao">Nenhum</span></p>
+        <p><strong>setor selecionado:</strong> <span id="id_setor">Nenhum</span></p>
     <?php endif; ?>
 </div>
 </div>
     <script>
 const materiaisSelecionados = new Set();
+    let setorSelecionado = null;
+
+    let selecionados = new Set(); // Para guardar PMs selecionados
+let responsavel = null;
+
+    function marcarsetor(id) {
+        setorSelecionado = id;
+        document.getElementById("id_setor").innerText = `Setor ${id}`; // <- Corrigido aqui!
+
+        // Resetar todos os botões
+        document.querySelectorAll(".marcar-setor").forEach(botao => {
+            botao.innerText = "Marcar";
+            botao.classList.remove("btn-success");
+            botao.classList.add("btn-primary");
+        });
+
+        // Destacar o botão clicado
+        let botaoSelecionado = document.querySelector(`button[onclick='marcarsetor(${id})']`);
+        if (botaoSelecionado) {
+            botaoSelecionado.innerText = "Marcado";
+            botaoSelecionado.classList.remove("btn-primary");
+            botaoSelecionado.classList.add("btn-success");
+        }
+    }
+
+
+
 function marcarmaterias(botao, id) {
     const linha = document.getElementById(`linha-${id}`);
     const spanMaterial = document.getElementById("id_material");
@@ -296,8 +323,8 @@ function buscarRegistro2() {
 
     xhr.send("viaturafiltro=" + encodeURIComponent(placa));
 }
-    let selecionados = new Set(); // Para guardar PMs selecionados
-let responsavel = null; // Para guardar o responsável
+   
+
 
 document.addEventListener("DOMContentLoaded", () => {
     document.addEventListener("change", (event) => {
@@ -345,9 +372,28 @@ function carregarPagina(pagina) {
 }
 
 function marcarResponsavel(id) {
+    // Desmarcar o antigo responsável e reabilitar seu checkbox
+    if (responsavel !== null && responsavel !== id) {
+        let antigoCheckbox = document.getElementById(`check-${responsavel}`);
+        if (antigoCheckbox) {
+            antigoCheckbox.disabled = false;
+            antigoCheckbox.checked = false;
+            selecionados.delete(responsavel); // <- Remove da lista se estava marcado
+        }
+    }
+
+    // Atualiza o novo responsável
     responsavel = id;
     document.getElementById("responsavelSelecionado").innerText = `ID ${id}`;
-    
+
+    // Desabilita o checkbox do novo responsável
+    let checkbox = document.getElementById(`check-${id}`);
+    if (checkbox) {
+        checkbox.checked = false; // Garante que ele não fique marcado
+        checkbox.disabled = true;
+        selecionados.delete(id); // Remove da lista de passageiros se estiver
+    }
+
     // Atualiza a visualização dos botões
     document.querySelectorAll(".marcar-responsavel").forEach(botao => {
         botao.innerText = "Marcar";
@@ -361,6 +407,8 @@ function marcarResponsavel(id) {
         botaoSelecionado.classList.remove("btn-info");
         botaoSelecionado.classList.add("btn-success");
     }
+
+    atualizarListaPMs(); // ✅ Atualiza a lista visual no final
 }
 
 function atualizarListaPMs() {
@@ -377,10 +425,15 @@ function reaplicarSelecoes() {
 
     if (responsavel) {
         let botaoSelecionado = document.querySelector(`button[onclick='marcarResponsavel(${responsavel})']`);
+        let checkbox = document.getElementById(`check-${responsavel}`);
         if (botaoSelecionado) {
             botaoSelecionado.innerText = "Marcado";
             botaoSelecionado.classList.remove("btn-info");
             botaoSelecionado.classList.add("btn-success");
+        }
+        if (checkbox) {
+            checkbox.checked = false;
+            checkbox.disabled = true;
         }
     }
 }
@@ -476,24 +529,60 @@ function salvarSelecionados() {
 
 }
 
+ function salvarSelecionados4(){
+
+    const viaturaText = document.getElementById('viatura').textContent.trim();
+const responsavelText = document.getElementById('responsavelSelecionado').textContent.trim();
+const pmsSelecionadosText = document.getElementById('pmsselecionado').textContent.trim();
+const funcaoText = document.getElementById('id_funcao').textContent.trim();
+const materialText = document.getElementById('id_material').textContent.trim();
+const setorText = document.getElementById('id_setor').textContent.trim();
+
+// Extrair apenas número da viatura (ex: "ID 10" => 10)
+const viaturaMatch = viaturaText.match(/\d+/);
+const viatura = viaturaMatch ? parseInt(viaturaMatch[0]) : null;
+
+// Responsável
+const responsavel = parseInt(responsavelText.replace(/\D/g, '')) || null;
+
+// Passageiros
+let pmsSelecionados = [];
+const passageirosMatch = pmsSelecionadosText.match(/\d+/g);
+if (passageirosMatch) {
+    pmsSelecionados = passageirosMatch.map(Number);
+    if (responsavel !== null) {
+        pmsSelecionados = pmsSelecionados.filter(pm => pm !== responsavel);
+    }
+}
+
+// Função
+const funcao = parseInt(funcaoText.replace(/\D/g, '')) || null;
+
+// Material — agora tratado como array
+let material = [];
+const materialMatch = materialText.match(/\d+/g);
+if (materialMatch) {
+    material = materialMatch.map(Number);
+}
+
+// Setor
+const setor = parseInt(setorText.replace(/\D/g, '')) || null;
+
+// Objeto final
+const dadosParaEnviar = {
+    viatura,
+    responsavel,
+    passageiros: pmsSelecionados,
+    funcao,
+    material,
+    setor
+};
+
+console.log(dadosParaEnviar);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
     </script>
 

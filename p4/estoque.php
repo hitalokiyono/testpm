@@ -38,7 +38,7 @@ else if($_SESSION["permissao"] < 4){
 </li>
 
 <li>
-  <a href="./alocacao.php"><i class="fas fa-dolly"></i> ALOCAÇÃO</a>
+  <a href="./alocacao.php"><i class="fas fa-dolly"></i>Dar Baixa Material</a>
 </li>
 
 <li>

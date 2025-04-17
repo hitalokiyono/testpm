@@ -15,6 +15,7 @@ $stmt->bindParam(":idinventario", $idinventario, PDO::PARAM_STR);
 $stmt->execute();
 
 
+
 $comandoSQL = "
     UPDATE p4_inventario 
     SET idStatus = 1 
