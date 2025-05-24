@@ -42,6 +42,9 @@ else if($_SESSION["permissao"] < 4){
         <a href="./motomeclocacao.php"><i class="fas fa-clipboard-list"></i> Locação</a>
     </li>
     <li>
+        <a href="./visualizar_viaturas_operando.php"><i class="fas fa-car-side"></i> Visualizar Operações</a>
+    </li>
+    <li>
         <a href="../inicial.php"><i class="fas fa-sign-out-alt"></i> SAIR</a>
     </li>
 </ul>

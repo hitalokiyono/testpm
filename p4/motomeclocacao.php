@@ -565,10 +565,9 @@ if (materialMatch) {
     material = materialMatch.map(Number);
 }
 
-// Setor
+
 const setor = parseInt(setorText.replace(/\D/g, '')) || null;
 
-// Objeto final
 const dadosParaEnviar = {
     viatura,
     responsavel,
@@ -578,10 +577,22 @@ const dadosParaEnviar = {
     setor
 };
 
-console.log(dadosParaEnviar);
 
-
-
+fetch('locar_dados_viaturas.php', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dadosParaEnviar)
+})
+.then(response => response.json())
+.then(data => {
+    console.log('Resposta do servidor:', data);
+  window.location.href = "./visualizar_viaturas_operando.php";
+})
+.catch(error => {
+    console.error('Erro ao enviar dados:', error);
+});
 }
 
     </script>
