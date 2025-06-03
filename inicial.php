@@ -101,7 +101,6 @@ if (!empty($agendamentosPendentes)) {
                 }
             }
         }
-
         echo "</ul>
               <button onclick='fecharPopup()'>Fechar</button>
               </div>";
@@ -127,9 +126,7 @@ if (!empty($agendamentosPendentes)) {
     width: 500px;
     text-align: center;
 }
-
 #popupemail{
-
     position: fixed;
     left: 80%;
     transform: translateX(-50%);
@@ -235,13 +232,10 @@ function fecharPopup2() {
                 echo '<li><a href="./visualizarfilhomenu.php"><i class="fas fa-child"></i> VISUALIZAR FILHO</a></li>';
                 echo '<li><a href="https://mail.google.com/mail/u/0/#inbox"><i class="fas fa-envelope-open-text"></i>Email</a></li>';
                 echo '<li><a href="./visualizacao.php"><i class="fas fa-eye"></i> VISUALIZAR</a></li>';
-                echo '<li><a href="./relatorios.php"><i class="fas fa-chart-pie"></i> RELATÓRIOS</a></li>';
                 echo '<li><a href="./p4/estoque.php"><i class="fas fa-warehouse"></i> ESTOQUE</a></li>';
              echo'<li><a href="./p4/motomecmenu.php"><i class="fas fa-car"></i> MOTOMEC</a></li>';
              echo '<li><a href="./p4/romaneiomenu.php"><i class="fas fa-list"></i> Alocação</a></li>';
-
             }
-            
             ?>
             <li><a href="./agenda.php"><i class="fas fa-calendar-alt"></i> AGENDA</a></li>
             <li><a href="./sair.php"><i class="fas fa-sign-out-alt"></i> SAIR</a></li>

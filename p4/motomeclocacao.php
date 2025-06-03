@@ -221,14 +221,14 @@ if (!isset($_SESSION)) {
         <button class="btn btn-warning" onclick="salvarSelecionados4()">Salvar</button>
     <?php endif; ?>
 </div>
-<div class="tabela-container5" id="tabela-container5"  style="display: none;">
-    <div class="titulo" style="margin-left:20px; font-family: Arial, sans-serif;">marcar setor selecionado</div>
 
+<div class="tabela-container5" id="tabela-container5" style="display: none;">
+    <div class="titulo" style="margin-left:20px; font-family: Arial, sans-serif;">Marcar setor(es) selecionado(s)</div>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>numero do setor</th>
-                <th>ações</th>
+                <th>Número do setor</th>
+                <th>Ações</th>
             </tr>
         </thead>
         <tbody id="tabelaResultados5">
@@ -243,7 +243,7 @@ if (!isset($_SESSION)) {
         </tbody>
     </table>
     <?php if ($_SESSION["permissao"] == 5): ?>
-        <p><strong>setor selecionado:</strong> <span id="id_setor">Nenhum</span></p>
+        <p><strong>Setor(es) selecionado(s):</strong> <span id="id_setor">Nenhum</span></p>
     <?php endif; ?>
 </div>
 </div>
@@ -254,25 +254,40 @@ const materiaisSelecionados = new Set();
     let selecionados = new Set(); // Para guardar PMs selecionados
 let responsavel = null;
 
-    function marcarsetor(id) {
-        setorSelecionado = id;
-        document.getElementById("id_setor").innerText = `Setor ${id}`; // <- Corrigido aqui!
+const setoresSelecionados = new Set(); // Substitui a variável setorSelecionado
 
-        // Resetar todos os botões
-        document.querySelectorAll(".marcar-setor").forEach(botao => {
-            botao.innerText = "Marcar";
-            botao.classList.remove("btn-success");
-            botao.classList.add("btn-primary");
-        });
+function marcarsetor(id) {
+    const linha = document.querySelector(`tr:has(button[onclick='marcarsetor(${id})'])`);
+    const botao = document.querySelector(`button[onclick='marcarsetor(${id})']`);
+    const spanSetor = document.getElementById("id_setor");
 
-        // Destacar o botão clicado
-        let botaoSelecionado = document.querySelector(`button[onclick='marcarsetor(${id})']`);
-        if (botaoSelecionado) {
-            botaoSelecionado.innerText = "Marcado";
-            botaoSelecionado.classList.remove("btn-primary");
-            botaoSelecionado.classList.add("btn-success");
-        }
+    if (setoresSelecionados.has(id)) {
+        // Desmarcar
+        setoresSelecionados.delete(id);
+        botao.innerText = "Marcar";
+        botao.classList.remove("btn-success");
+        botao.classList.add("btn-primary");
+        linha.classList.remove("marcado");
+    } else {
+        // Marcar
+        setoresSelecionados.add(id);
+        botao.innerText = "Marcado";
+        botao.classList.remove("btn-primary");
+        botao.classList.add("btn-success");
+        linha.classList.add("marcado");
     }
+
+    // Atualizar exibição
+    spanSetor.innerText = setoresSelecionados.size > 0 
+        ? Array.from(setoresSelecionados).sort((a, b) => a - b).join(", ")
+        : "Nenhum";
+}
+
+
+
+
+
+
 
 
 
@@ -537,7 +552,7 @@ const pmsSelecionadosText = document.getElementById('pmsselecionado').textConten
 const funcaoText = document.getElementById('id_funcao').textContent.trim();
 const materialText = document.getElementById('id_material').textContent.trim();
 const setorText = document.getElementById('id_setor').textContent.trim();
-
+ 
 // Extrair apenas número da viatura (ex: "ID 10" => 10)
 const viaturaMatch = viaturaText.match(/\d+/);
 const viatura = viaturaMatch ? parseInt(viaturaMatch[0]) : null;
@@ -564,8 +579,9 @@ const materialMatch = materialText.match(/\d+/g);
 if (materialMatch) {
     material = materialMatch.map(Number);
 }
+  let setores = Array.from(setoresSelecionados);
 
-
+console.log(setores);
 const setor = parseInt(setorText.replace(/\D/g, '')) || null;
 
 const dadosParaEnviar = {
@@ -574,7 +590,7 @@ const dadosParaEnviar = {
     passageiros: pmsSelecionados,
     funcao,
     material,
-    setor
+    setores
 };
 
 

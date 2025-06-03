@@ -1,0 +1,134 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body,
+html {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f3f3f3;
+}
+
+
+
+/* alterado  pelo hitalo*/
+html,
+body {
+    overflow-x: hidden;
+    background-color: black;
+}
+
+.table-container {
+
+    margin-bottom: 15px;
+
+}
+
+.imagem {
+    z-index: 999;
+    margin-left: 10px;
+    margin-top: 50px;
+    position: absolute;
+    width: 50px;
+}
+
+
+
+
+
+/* TITULOS H1 e H2 */
+.titulo {
+
+    font-weight: lighter;
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: center;
+    background-color: #ccc;
+    padding: 5px;
+}
+
+/* TITULOS H1 e H2 FINAL*/
+
+/* TELA LOGIN */
+.logo {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    padding: 1rem;
+}
+
+#logo1,
+#logo2,
+#logo3 {
+
+    padding: 1rem;
+    object-fit: cover;
+    width: 250px;
+}
+
+#logo2 {
+
+    width: 370px;
+
+
+}
+
+
+/* TELA LOGIN FINAL*/
+
+
+
+
+/* MENU */
+
+.menu ul {
+    display: flex;
+    height: 70px;
+    background-color: black;
+    background-image: linear-gradient(to left, red, transparent, white);
+    justify-content: end;
+    align-items: center;
+    list-style-type: none;
+}
+
+.menu ul li {
+    color:white;
+    padding: 15px 20px;
+}
+
+.menu ul li:hover {
+    background-color: crimson;
+    color: white;
+}
+
+.menu ul a {
+    text-decoration: none;
+    color: black;
+}
+
+/* MENU FINAL*/
+.step {
+    display: none;
+}
+
+.step.active {
+    display: block;
+    width: 100%;
+
+}
+
+.rodape {
+    width: 100%;
+    font-weight: lighter;
+    color: white;
+    display: flex;
+    justify-content: center;
+    background-color: black;
+    padding: 5px;
+    margin-top: auto;
+}
+
+

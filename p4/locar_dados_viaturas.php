@@ -15,7 +15,7 @@ try {
         throw new Exception("Erro ao decodificar JSON: " . json_last_error_msg());
     }
 
-    if (!isset($dados['viatura'], $dados['responsavel'], $dados['funcao'], $dados['setor'], $dados['material'])) {
+    if (!isset($dados['viatura'], $dados['responsavel'], $dados['funcao'], $dados['setores'], $dados['material'])) {
         throw new Exception("Faltando parâmetros obrigatórios no JSON");
     }
 
@@ -37,42 +37,52 @@ try {
     $passageiros = $dados['passageiros'] ?? [];
     $funcao = $dados['funcao'];
     $material = $dados['material'];
-    $setor = $dados['setor'];
-
-    
-    $stmt_locacao1 = $conexao->prepare("UPDATE `p4_inventario` SET `idStatus` = '1' WHERE `p4_inventario`.`id` = :viatura");
-    $stmt_locacao1->bindParam(":viatura", $viatura, PDO::PARAM_INT);
-    $stmt_locacao1->execute();
+    $setores = $dados['setores']; // Agora recebe um array de setores
 
     if (!is_array($passageiros)) {
         throw new Exception("O campo passageiros deve ser um array");
     }
 
+    if (!is_array($setores)) {
+        throw new Exception("O campo setores deve ser um array");
+    }
+
     // Inicia transação
     $conexao->beginTransaction();
 
+    // Atualiza status da viatura para "em uso" (idStatus = 1)
+    $stmt_locacao1 = $conexao->prepare("UPDATE `p4_inventario` SET `idStatus` = '1' WHERE `p4_inventario`.`id` = :viatura");
+    $stmt_locacao1->bindParam(":viatura", $viatura, PDO::PARAM_INT);
+    $stmt_locacao1->execute();
 
-
-
-
-
-
-
-
-
-    // Inserção na tabela locacao_viatura
+    // Inserção na tabela locacao_viatura (sem id_setor)
     $stmt_locacao = $conexao->prepare("INSERT INTO `locacao_viatura` 
-        (`id_locacao`, `id_viatura`, `id_funcao`, `id_p1responsavel`, `id_setor`, `datainicio`, `datafim`) 
-        VALUES (NULL, :viatura, :funcao, :responsavel, :setor, current_timestamp(), NULL)");
+        (`id_locacao`, `id_viatura`, `id_funcao`, `id_p1responsavel`, `datainicio`, `datafim`) 
+        VALUES (NULL, :viatura, :funcao, :responsavel, current_timestamp(), NULL)");
     $stmt_locacao->bindParam(":viatura", $viatura, PDO::PARAM_INT);
     $stmt_locacao->bindParam(":funcao", $funcao, PDO::PARAM_INT);
     $stmt_locacao->bindParam(":responsavel", $responsavel, PDO::PARAM_INT);
-    $stmt_locacao->bindParam(":setor", $setor, PDO::PARAM_INT);
     $stmt_locacao->execute();
 
     $id_locacao = $conexao->lastInsertId();
 
-    // Prepara as declarações
+    // Inserção dos setores na tabela locacao_setor
+    $stmt_setores = $conexao->prepare("INSERT INTO `locacao_setor` 
+        (`id_setor`, `setor`, `id_locacao`) 
+        VALUES (NULL, :setor, :id_locacao)");
+    
+    foreach ($setores as $setor) {
+        if (!is_numeric($setor)) {
+            throw new Exception("ID de setor inválido: " . $setor);
+        }
+        
+        $stmt_setores->execute([
+            ':setor' => $setor,
+            ':id_locacao' => $id_locacao
+        ]);
+    }
+
+    // Prepara as declarações para materiais e passageiros
     $stmt_update = $conexao->prepare("UPDATE p4_inventario SET idStatus = 1 WHERE id = :material");
 
     $stmt_controle = $conexao->prepare("INSERT INTO `p4_controleinventario` 

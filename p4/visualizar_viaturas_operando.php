@@ -143,6 +143,8 @@ max-height : 100px;
         display: flex;
         flex-wrap: wrap;
         gap: 5px;
+        max-height: 300px;
+            max-width: 350px;
         align-items: flex-end;
     }
     .filtro-item {
@@ -173,36 +175,58 @@ max-height : 100px;
 require_once("../conexao/conexao.php");
 
 // Obter parâmetros de filtro
-$dataFiltro = $_GET['data'] ?? date('Y-m-d');
-$statusFiltro = $_GET['status'] ?? 'operacao'; // 'operacao' ou 'finalizadas'
+$dataFiltro = $_GET['data'] ?? '';
+$statusFiltro = $_GET['status'] ?? 'todos'; // 'operacao', 'finalizadas' ou 'todos'
 
-// Consulta base
-$sql = "SELECT lv.id_locacao, lv.datainicio, lv.datafim, lv.id_setor,
-               vi.placa, vi.prefixo,
-               inv.id,
-               f.funcao,
-               p1.RE, p1.NomeCompleto,
-               tab.tipo
-        FROM locacao_viatura AS lv
-        INNER JOIN p4_inventario AS inv ON lv.id_viatura = inv.id
-        inner join p4_tipo_tabelas as tab on tab.id_tabela = inv.idTipo_tabela 
-        INNER JOIN p4_viaturas AS vi ON inv.numerodepatrimonio = vi.numerodepatrimonio
-        INNER JOIN p4_funcao AS f ON lv.id_funcao = f.id_funcao
-        INNER JOIN p1 ON lv.id_p1responsavel = p1.id";
+$sql = "SELECT lv.id_locacao, lv.datainicio, lv.datafim,
+        GROUP_CONCAT(DISTINCT setr.setor) AS setores,
+        vi.placa, vi.prefixo,
+        inv.id,
+        f.funcao,
+        p1.RE, p1.NomeCompleto,
+        tab.tipo 
+FROM locacao_viatura AS lv 
+INNER JOIN p4_inventario AS inv ON lv.id_viatura = inv.id 
+INNER JOIN p4_tipo_tabelas as tab on tab.id_tabela = inv.idTipo_tabela  
+INNER JOIN p4_viaturas AS vi ON inv.numerodepatrimonio = vi.numerodepatrimonio 
+INNER JOIN p4_funcao AS f ON lv.id_funcao = f.id_funcao 
+LEFT JOIN locacao_setor as setr on setr.id_locacao = lv.id_locacao 
+INNER JOIN p1 ON lv.id_p1responsavel = p1.id";
 
 // Aplicar filtros
+$where = [];
+$params = [];
+
 if ($statusFiltro === 'operacao') {
-    $sql .= " WHERE lv.datafim IS NULL";
-} else {
-    $sql .= " WHERE DATE(lv.datafim) = :dataFiltro";
+    $where[] = "lv.datafim IS NULL";
+    if (!empty($dataFiltro)) {
+        $where[] = "DATE(lv.datainicio) = :dataFiltro";
+        $params[':dataFiltro'] = $dataFiltro;
+    }
+} elseif ($statusFiltro === 'finalizadas') {
+    $where[] = "lv.datafim IS NOT NULL";
+    if (!empty($dataFiltro)) {
+        $where[] = "DATE(lv.datafim) = :dataFiltro";
+        $params[':dataFiltro'] = $dataFiltro;
+    }
+} elseif ($statusFiltro === 'todos' && !empty($dataFiltro)) {
+    // Para 'todos', filtramos por data de início ou data de fim
+    $where[] = "(DATE(lv.datainicio) = :dataFiltro OR (lv.datafim IS NOT NULL AND DATE(lv.datafim) = :dataFiltro))";
+    $params[':dataFiltro'] = $dataFiltro;
 }
 
+if (!empty($where)) {
+    $sql .= " WHERE " . implode(" AND ", $where);
+}
+
+$sql .= " GROUP BY lv.id_locacao, lv.datainicio, lv.datafim, vi.placa, vi.prefixo, inv.id, f.funcao, p1.RE, p1.NomeCompleto, tab.tipo";
 $sql .= " ORDER BY lv.datainicio DESC";
+
 
 $stmt = $conexao->prepare($sql);
 
-if ($statusFiltro !== 'operacao') {
-    $stmt->bindParam(':dataFiltro', $dataFiltro);
+foreach ($params as $key => $value) {
+    $stmt->bindValue($key, $value);
 }
 
 $stmt->execute();
@@ -213,13 +237,14 @@ $viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="filtro-container">
         <div class="filtro-item">
             <label for="statusFiltro">Status:</label>
-            <select id="statusFiltro" class="form-select" onchange="atualizarFiltros()">
+            <select id="statusFiltro" class="form-select">
+                <option value="todos" <?= $statusFiltro === 'todos' ? 'selected' : '' ?>>Todos</option>
                 <option value="operacao" <?= $statusFiltro === 'operacao' ? 'selected' : '' ?>>Em Operação</option>
                 <option value="finalizadas" <?= $statusFiltro === 'finalizadas' ? 'selected' : '' ?>>Finalizadas</option>
             </select>
         </div>
         
-        <div class="filtro-item" id="dataFiltroContainer" style="<?= $statusFiltro === 'operacao' ? 'display: none;' : '' ?>">
+        <div class="filtro-item">
             <label for="dataFiltro">Data:</label>
             <input type="date" id="dataFiltro" class="form-control" value="<?= $dataFiltro ?>">
         </div>
@@ -233,7 +258,15 @@ $viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <button type="button" class="btn btn-filtrar" onclick="aplicarFiltros()">
                 <i class="fas fa-filter"></i> Filtrar
             </button>
+            <button type="button" class="btn btn-secondary ms-2" onclick="limparFiltros()">
+                <i class="fas fa-times"></i> Limpar
+            </button>
         </div>
+           <div class="ms-auto"> <!-- Adiciona margem automática à esquerda para empurrar para a direita -->
+        <button type="button" class="btn btn-success" onclick="imprimirRelatorio()">
+            <i class="fas fa-print"></i> Imprimir
+        </button>
+    </div>
     </div>
 
     <table class="table table-striped table-bordered table-hover">
@@ -268,7 +301,7 @@ $viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?= htmlspecialchars($viatura['NomeCompleto'] ?? '') ?></td>
                 <td><?= htmlspecialchars($viatura['RE'] ?? '') ?></td>
                 <td><?= htmlspecialchars($viatura['funcao'] ?? '') ?></td>
-                <td><?= htmlspecialchars($viatura['id_setor'] ?? '') ?></td>
+                <td><?= htmlspecialchars($viatura['setores'] ?? '') ?></td>
                 <td><?= htmlspecialchars($viatura['datainicio'] ?? '') ?></td>
                 <td><?= !empty($viatura['datafim']) ? htmlspecialchars($viatura['datafim']) : 'Em operação' ?></td>
                 <td>
@@ -277,7 +310,7 @@ $viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             Finalizar
                         </button>
                     <?php endif; ?>
-        <button class="btn btn-info btn-sm" onclick="visualizarDetalhes(<?= $id_locacao ?>, <?= $id_viatura ?>, '<?= htmlspecialchars($id_tipo, ENT_QUOTES) ?>')">
+                    <button class="btn btn-info btn-sm" onclick="visualizarDetalhes(<?= $id_locacao ?>, <?= $id_viatura ?>, '<?= htmlspecialchars($id_tipo, ENT_QUOTES) ?>')">
                         Detalhes
                     </button>
                 </td>
@@ -292,34 +325,25 @@ $viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script>
-  function visualizarDetalhes(idLocacao, idviatura, idtipo) {
+function visualizarDetalhes(idLocacao, idviatura, idtipo) {
     window.location.href = "detalhes_operacao.php?idlocacao=" + idLocacao + "&idviatura=" + idviatura + "&tabela=" + idtipo;
-}
-
-
-function atualizarFiltros() {
-    const status = document.getElementById('statusFiltro').value;
-    const dataContainer = document.getElementById('dataFiltroContainer');
-    
-    if (status === 'finalizadas') {
-        dataContainer.style.display = 'block';
-    } else {
-        dataContainer.style.display = 'none';
-    }
 }
 
 function aplicarFiltros() {
     const status = document.getElementById('statusFiltro').value;
-    const data = status === 'finalizadas' ? document.getElementById('dataFiltro').value : '';
-    const busca = document.getElementById('buscaViatura').value;
+    const data = document.getElementById('dataFiltro').value;
     
     let url = `visualizar_viaturas_operando.php?status=${status}`;
     
-    if (status === 'finalizadas') {
+    if (data) {
         url += `&data=${data}`;
     }
     
     window.location.href = url;
+}
+
+function limparFiltros() {
+    window.location.href = "visualizar_viaturas_operando.php";
 }
 
 // Filtro de busca rápida
@@ -342,8 +366,6 @@ function filtrarViaturas() {
         linha.style.display = textoLinha.includes(input) ? "" : "none";
     });
 }
-
-
 
 function finalizarOperacao(idLocacao, id_viatura) {
     if (!confirm('Tem certeza que deseja finalizar esta operação?')) {
@@ -386,6 +408,46 @@ function finalizarOperacao(idLocacao, id_viatura) {
 
 // Filtra ao digitar
 document.getElementById("buscaViatura").addEventListener("keyup", filtrarViaturas);
+
+function imprimirRelatorio() {
+    // Coletar todos os IDs de locação das linhas visíveis
+    const idsLocacao = [];
+    const linhas = document.querySelectorAll('#tabelaViaturas tr');
+    
+    linhas.forEach(linha => {
+        // Verificar se a linha está visível
+        if (linha.style.display !== 'none') {
+            // Pegar o ID da locação (está na 10ª coluna, índice 9)
+            const idLocacao = linha.cells[9].textContent;
+            if (idLocacao) {
+                idsLocacao.push(idLocacao);
+            }
+        }
+    });
+    
+    if (idsLocacao.length === 0) {
+        alert('Nenhuma locação encontrada para imprimir!');
+        return;
+    }
+    
+    // Pegar os parâmetros de filtro atuais
+    const status = document.getElementById('statusFiltro').value;
+    const data = document.getElementById('dataFiltro').value;
+    
+    // Criar URL para a página de impressão
+    let url = `imprimir_locacao.php?ids=${idsLocacao.join(',')}`;
+    
+    if (status && status !== 'todos') {
+        url += `&status=${status}`;
+    }
+    
+    if (data) {
+        url += `&data=${data}`;
+    }
+    
+    // Abrir em nova janela para impressão
+    window.open(url, '_blank');
+}
 </script>
 </body>
 </html>

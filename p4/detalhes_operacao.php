@@ -1,3 +1,6 @@
+
+
+<?php require_once("./menu.php"); ?>
 <?php
 // Inicia a sessão se não estiver iniciada
 if (!isset($_SESSION)) {
@@ -13,23 +16,43 @@ try {
     }
 
     // Consulta da locação
-    $sqlLocacao = 'SELECT lv.id_locacao, lv.datainicio, lv.datafim, lv.id_setor,
-                          vi.placa, vi.prefixo,
-                          inv.id AS id_inventario,
-                          mo.modelo,
-                          f.funcao,
-                          dp.descricao AS permissao,
-                          p1.RE, p1.NomeCompleto, p1.img
-                   FROM locacao_viatura AS lv
-                   INNER JOIN p4_inventario AS inv ON lv.id_viatura = inv.id
-                   INNER JOIN p4_viaturas AS vi ON inv.numerodepatrimonio = vi.numerodepatrimonio
-                   INNER JOIN p4_funcao AS f ON lv.id_funcao = f.id_funcao
-                   INNER JOIN p1 ON lv.id_p1responsavel = p1.id
-                   INNER JOIN permissoes AS per ON p1.id = per.id_pm
-                   INNER JOIN descricaopermissao AS dp ON per.permissao = dp.id_permissao
-                   INNER JOIN p4_viaturas AS via ON inv.numerodepatrimonio = via.numerodepatrimonio
-                   INNER JOIN p4_modelos AS mo ON via.Modelo = mo.idModelo
-                   WHERE lv.id_locacao = :id_locacao';
+    $sqlLocacao = 'SELECT 
+    lv.id_locacao, 
+    lv.datainicio, 
+    lv.datafim,
+    GROUP_CONCAT(DISTINCT setor.setor ORDER BY setor.setor SEPARATOR ", ") AS setores,
+    vi.placa, 
+    vi.prefixo,
+    inv.id AS id_inventario,
+    mo.modelo,
+    f.funcao,
+    dp.descricao AS permissao,
+    p1.RE, 
+    p1.NomeCompleto, 
+    p1.img
+FROM locacao_viatura AS lv
+INNER JOIN p4_inventario AS inv ON lv.id_viatura = inv.id
+INNER JOIN p4_viaturas AS vi ON inv.numerodepatrimonio = vi.numerodepatrimonio
+INNER JOIN p4_funcao AS f ON lv.id_funcao = f.id_funcao
+INNER JOIN p1 ON lv.id_p1responsavel = p1.id
+INNER JOIN permissoes AS per ON p1.id = per.id_pm
+INNER JOIN descricaopermissao AS dp ON per.permissao = dp.id_permissao
+INNER JOIN p4_modelos AS mo ON vi.Modelo = mo.idModelo
+INNER JOIN locacao_setor as setor ON setor.id_locacao = lv.id_locacao
+WHERE lv.id_locacao = :id_locacao
+GROUP BY 
+    lv.id_locacao, 
+    lv.datainicio, 
+    lv.datafim,
+    vi.placa, 
+    vi.prefixo,
+    inv.id,
+    mo.modelo,
+    f.funcao,
+    dp.descricao,
+    p1.RE, 
+    p1.NomeCompleto, 
+    p1.img';
 
     $stmtLocacao = $conexao->prepare($sqlLocacao);
     $stmtLocacao->bindValue(':id_locacao', $id_locacao, PDO::PARAM_INT);
@@ -209,6 +232,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>Detalhes da Operação</title>
+     <link rel="stylesheet" href="../css/estilot.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .hidden {
@@ -239,6 +263,9 @@ try {
             margin-bottom: 20px;
             border-radius: 6px;
         }
+        body{
+        background: radial-gradient(rgb(61, 61, 62));
+        }
     </style>
 </head>
 <body>
@@ -254,10 +281,10 @@ try {
             <div class="card-body">
 
                 <?php 
-                $camposOcultos = ['id', 'observacao', 'id_locacao', 'id_setor', 'id_inventario', 'img'];
+                $camposOcultos = ['id', 'observacao', 'id_locacao', 'id_inventario', 'img'];
                 $grupoPessoal = ['NomeCompleto', 'RE', 'permissao'];
-                $grupoViatura = ['placa', 'prefixo', 'modelo'];
-                $grupoGeral = ['datainicio', 'datafim', 'funcao'];
+                $grupoViatura = ['placa', 'prefixo', 'modelo', 'setor'];
+                $grupoGeral = ['datainicio', 'datafim', 'funcao', 'setores'];
 
                 function mostrarGrupo($titulo, $grupo, $dados, $classe) {
                     echo "<h5 class=\"mb-2\">$titulo</h5>";
@@ -286,7 +313,8 @@ try {
                         echo "Em operação";
                     } else {
                         $src = '.' . htmlspecialchars($detalhesLocacao['img']);
-                        echo "<img src=\"$src\" alt=\"Foto\" class=\"img-thumbnail\" style=\"max-height: 150px;\">";
+                        echo "<img src=\"$src\" alt=\"Foto\" class=\"img-thumbnail float-end me-2\" style=\"max-height: 150px;\">";
+
                     }
                     echo "</td></tr>";
                     echo "</table>";
@@ -303,27 +331,41 @@ try {
 </div>
 
 
+
+
+
+
+
+
 <div class="container my-4">
     <div class="section-header bg-success">
         <h4 class="mb-0">Materiais Vinculados à Locação</h4>
     </div>
 
     <?php if (!empty($todosResultados)): ?>
+        <?php 
+        // 🔒 Lista de campos que você quer ocultar:
+        $camposOcultos = ['id', 'id_locacao', 'id_material', 'id_tabela', 'idTipo_tabela', 'idstatus', 'idModelo', 'idModelo'
+    , 'idMarca', 'idTipo', 'categoria', 'idLocal', 'idComplemento', 'id_materias_viaturas', 'id_controleinventario', 'id_alocacao'
+    
+, 'idLocComp', 'idStatus'
+]; 
+        ?>
+
         <?php foreach ($todosResultados as $index => $resultado): ?>
             <div class="card card-item">
                 <div class="card-header">
-                    <h6 class="mb-0">Item <?= $index + 1 ?> - Tipo: <?= htmlspecialchars($resultado['tipo_tabela'] ?? 'Desconhecido') ?></h6>
+                    <h6 class="mb-0">Item <?= $index + 1 ?> - número de patrimônio: <?= htmlspecialchars($resultado['numerodepatrimonio'] ?? 'Desconhecido') ?></h6>
                 </div>
                 <div class="card-body">
                     <table class="table table-bordered table-details">
                         <tbody>
                             <?php foreach ($resultado as $chave => $valor): ?>
-                                <?php if ($chave !== 'tipo_tabela'): ?>
-                                    <tr>
-                                        <th><?= htmlspecialchars($chave) ?></th>
-                                        <td><?= is_null($valor) ? 'NULL' : htmlspecialchars($valor) ?></td>
-                                    </tr>
-                                <?php endif; ?>
+                                <?php if (in_array($chave, $camposOcultos)) continue; ?>
+                                <tr>
+                                    <th><?= htmlspecialchars($chave) ?></th>
+                                    <td><?= is_null($valor) ? 'NULL' : htmlspecialchars($valor) ?></td>
+                                </tr>
                             <?php endforeach; ?>
                         </tbody>
                     </table>
@@ -334,6 +376,8 @@ try {
         <div class="alert alert-warning">Nenhum material encontrado para esta locação.</div>
     <?php endif; ?>
 </div>
+
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>

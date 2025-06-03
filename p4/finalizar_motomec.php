@@ -8,7 +8,7 @@ try {
     $dados = json_decode($input, true);
 
     if (json_last_error() !== JSON_ERROR_NONE) {
-        throw new Exception("Erro ao decodificar JSON: " . json_last_error_msg());
+        throw new Exception("erro" . json_last_error_msg());
     }
 
     if (!isset($dados['idLocacao'], $dados['id_viatura'])) {
@@ -43,7 +43,7 @@ try {
     $stmtMateriais = $conexao->prepare("
         UPDATE p4_inventario AS inv
         INNER JOIN p4_controleinventario AS con ON inv.id = con.idInventario
-        INNER JOIN materias_viaturas AS mv ON con.id_controle = mv.id_controleinvantario
+        INNER JOIN materias_viaturas AS mv ON con.id_controle = mv.id_controleinventario
         SET inv.idStatus = 2
         WHERE mv.id_alocacao = :id_locacao
     ");
@@ -53,7 +53,7 @@ try {
     // 4. Atualizar data de saída dos materiais no controle de inventário
     $stmtControle = $conexao->prepare("
         UPDATE p4_controleinventario AS con
-        INNER JOIN materias_viaturas AS mv ON con.id_controle = mv.id_controleinvantario
+        INNER JOIN materias_viaturas AS mv ON con.id_controle = mv.id_controleinventario
         SET con.dtSaida = CURRENT_DATE()
         WHERE mv.id_alocacao = :id_locacao
     ");
