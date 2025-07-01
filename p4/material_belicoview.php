@@ -2,6 +2,7 @@
 
 require_once("../conexao/conexao.php");
 
+
 if (isset($_POST['tipo_tabela'])) {
     $tabelas = [
         1 => "p4_armas",

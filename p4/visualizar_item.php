@@ -263,9 +263,7 @@ if ($resultado) {
         <!-- Botões no final -->
         <div class="text-begin" style="margin-left:2%;">
             <button onclick="history.back();" class="btn btn-secondary">Voltar</button>
-            <a href="relocar.php" class="btn btn-warning">Relocar</a>
             <button onclick="imprimirComFoto();" class="btn btn-info">Imprimir</button>
-            <a href="editar.php" class="btn btn-success">Editar</a>
             <a href="exce.php" class="btn btn-primary">Exportar para Excel</a> <!-- Botão de exportação -->
         </div>
     </div>

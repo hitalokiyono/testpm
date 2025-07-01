@@ -1,3 +1,13 @@
+
+<?php 
+session_start();
+if (isset($_SESSION['erro'])) {
+    echo '<div class="alert alert-danger">' . $_SESSION['erro'] . '</div>';
+    unset($_SESSION['erro']);
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -249,7 +259,21 @@ body,html {
     </div>
 </div>
 
+<script>function hideAlertAfterDelay() {
+    // Seleciona todos os elementos com a classe 'alert-danger'
+    const alertElements = document.querySelectorAll('.alert.alert-danger');
+    
+    // Para cada elemento encontrado
+    alertElements.forEach(alert => {
+        // Define um timeout para esconder o elemento após 5 segundos (5000 milissegundos)
+        setTimeout(() => {
+            alert.style.display = 'none';
+        }, 5000);
+    });
+}
 
+// Chama a função quando o DOM estiver completamente carregado
+document.addEventListener('DOMContentLoaded', hideAlertAfterDelay);</script>
     
 </body>
 <</html>

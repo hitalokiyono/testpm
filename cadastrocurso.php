@@ -41,12 +41,7 @@ if (!isset($_SESSION)) {
                                 <input type="text" name="nome_do_curso[]" placeholder="Descreva o nome do curso.">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col">
-                                <label for="dt_inicio">Data de início</label>
-                                <input type="date" name="dt_inicio[]" placeholder="Insira a data de início">
-                            </div>
-                        </div>
+                    
                         <div class="row">
                             <div class="col">
                                 <label for="dt_termino">Data de término</label>

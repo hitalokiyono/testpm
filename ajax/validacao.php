@@ -97,13 +97,13 @@ if (
     }
 }
 
-// Verificando o campo Endereço
-if ($campo == "endereco") {
-    // Endereço pode ter letras, números e espaços (mínimo de 5 caracteres)
-    if (!preg_match("/^[a-zA-Z0-9\s]{5,}$/", $valor)) {
-        echo "(Digite um endereço válido - mínimo de 5 caracteres)";
-    }
-}
+// // Verificando o campo Endereço
+// if ($campo == "endereco") {
+//     // Endereço pode ter letras, números e espaços (mínimo de 5 caracteres)
+//     if (!preg_match("/^[a-zA-Z0-9\s]{5,}$/", $valor)) {
+//         echo "(Digite um endereço válido - mínimo de 5 caracteres)";
+//     }
+// }
 
 // Verificando o campo Número da Casa
 if ($campo == "numero") {

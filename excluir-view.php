@@ -2,7 +2,7 @@
 require_once("./conexao/conexao.php");
 
 try {
-    $sql = "SELECT * FROM p1 WHERE id=:id AND status = 0";
+    $sql = "SELECT * FROM p1 WHERE id=:id AND status = 1";
     $comandoSQL = $conexao->prepare($sql);
     $comandoSQL->execute(array(":id" => $id));
     $resultado = $comandoSQL->fetch();

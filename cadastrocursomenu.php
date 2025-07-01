@@ -19,8 +19,14 @@
         <div class="img"></div>
         <ul>
         <li><a href="./visualizarcurso.php"><i class="fas fa-eye"></i> Visualizar</a></li>
-<li><a href="./cadastrocurso.php"><i class="fas fa-plus-circle"></i> Cadastrar</a></li>
+ 
+        <?php
+        if ($_SESSION['permissao'] == 1 ) {
 
+
+  echo' <li><a href="./cadastrocurso.php"><i class="fas fa-eye"></i> Visualizar</a></li>';
+        }
+?>
             <li><a href="./inicial.php"><i class="fas fa-sign-out-alt"></i> voltar</a></li>
         </ul>
     </div>

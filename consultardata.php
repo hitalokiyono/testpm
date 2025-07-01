@@ -10,7 +10,7 @@ try {
     $agendamentos = [];
 
     // Verifica se o ID atual na sessão é diferente de 5
-    if ($_SESSION['permissao'] != 5) {
+    if ($_SESSION['permissao'] < 4) {
         $sql = "
             SELECT 
                 da.id_dataagendamento, 
@@ -166,7 +166,7 @@ try {
 
 
 
-    
+ <?php if ($_SESSION['permissao'] > 4): ?>
     <div class="search-container">
         <form method="GET" action="consultardata.php">
             <label for="re">Buscar pelo RE:</label>
@@ -174,8 +174,10 @@ try {
             <input type="submit" value="Buscar">
         </form>
     </div>
+<?php endif; ?>
 
     <table>
+
         <thead>
             <tr>
                 <th>Nome do PM</th>
@@ -205,7 +207,7 @@ try {
                         </td>
                         <td>
                             <?php if (!$agendamento['recebida'] ): ?>
-                                <?php if ($_SESSION['permissao'] === 5): ?>
+                                <?php if ($_SESSION['permissao'] > 4): ?>
     <form action="alterar_status_agendamento.php" method="POST">
         <input type="hidden" name="id_dataagendamento" value="<?= $agendamento['id_dataagendamento'] ?>">
         <button type="submit">Marcar como recebida</button>

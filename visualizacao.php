@@ -88,7 +88,7 @@
                     <th>ativo</th>
                     <th>ED</th>
                     <?php
-                    if ($_SESSION['permissao'] === 5  ||  $_SESSION['permissao'] === 1) {
+                    if ($_SESSION['permissao'] > 0) {
                         echo '<th>EX</th>';
                     }
                     ?>

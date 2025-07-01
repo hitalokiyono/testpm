@@ -187,6 +187,13 @@ try {
 
     session_start();
     $_SESSION["id_cad"] = $conexao->lastInsertId();
+
+if (!isset($_SESSION["email"])) {
+    $_SESSION["email"] = 'genericoemail@gmail.com';
+}
+
+
+
     if ($comandoSQL->rowCount() > 0) {
         // Adicionando permissao nas linhas 166 a 168
         $comandoSQL1 = $conexao->prepare("INSERT INTO email (id_email, email, ativo, id_pm ) VALUES (null, :email, 0,:id_atual)");

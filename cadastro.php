@@ -1,7 +1,6 @@
 <?php
 session_start();
-if (!isset($_SESSION["id_atual"]))
-     header("location:./index.php")
+
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -18,7 +17,7 @@ if (!isset($_SESSION["id_atual"]))
     <?php
 if (!isset($_SESSION["id_atual"])) {
     $_SESSION['permissao'] = 0;
-    require_once("./menu.php");
+
 } else {
 
     require_once("./consultapermissao.php");

@@ -30,11 +30,13 @@ if (!isset($_SESSION)) {
     <h1 class="titulo">visualizar materias alocação</h1>
     <div id="container" class="d-flex justify-content-around p-3">
     <div class="tabela-container" >
-        <div class="pesquisar" style="  margin-left: 10px; display: flex;    justify-content: center;
-">
-            <input type="text" id="buscaPatrimonio" class="form-control mb-3" placeholder="Digite o RE...">
-            <button type="button" style="margin-left: 10px; height: 36px;" class="btn btn-primary" onclick="buscarRegistro()">Pesquisar</button>
-            </div>
+ <?php if ($_SESSION['permissao'] >= 4): ?>
+    <div class="pesquisar" style="margin-left: 10px; display: flex; justify-content: center;">
+        <input type="text" id="buscaPatrimonio" class="form-control mb-3" placeholder="Digite o RE...">
+        <button type="button" style="margin-left: 10px; height: 36px;" class="btn btn-primary" onclick="buscarRegistro()">Pesquisar</button>
+    </div>
+<?php endif; ?>
+
             <div class="titulo"  style="margin-left:20px;  font-family: Arial, sans-serif;; ">controle de alocação</div>
             <table class="table table-striped">
                 <thead>

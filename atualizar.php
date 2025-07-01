@@ -643,7 +643,7 @@
                     <?php
                      echo '<div class="addtipo">';
                      echo '<a style=" background-color:rgb(255, 255, 255);"; href="./visualizacao.php" class="no-underline">Voltar</a>';
-                    if ($_SESSION['permissao'] === 5  ||  $_SESSION['permissao'] === 1) {
+                    if ($_SESSION['permissao'] > 0 ) {
                         
                        echo '<a href="./cadastrocurso.php?id=' . $resultado['id'] . '" class="no-underline">ADICIONAR CURSO</a>';
                        echo '<a style=" background-color:rgb(0, 0, 0); color: rgb(255, 255, 255);"href="./cadastrofilho.php?id=' . $resultado['id'] . '" class="no-underline">ADICIONAR FILHO</a>';

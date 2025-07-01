@@ -223,8 +223,6 @@ $statusList = $stmtStatus->fetchAll(PDO::FETCH_ASSOC);
                     <td><?= isset($tabelas[$item['idTipo_tabela']]) ? str_replace('p4_', '', $tabelas[$item['idTipo_tabela']]) : "Desconhecido" ?></td>
                     <td>
                     <a href="visualizar_item.php?patrimonio=<?= urlencode($item['numerodepatrimonio']) ?>&tabela=<?= urlencode($tabelas[$item['idTipo_tabela']]) ?>" class="btn btn-info btn-sm">Visualizar</a>
-                        <a href="alterar_status.php?id=<?= $item['id'] ?>" class="btn btn-primary btn-sm">Realocar</a>
-                        <a href="alterar_status.php?id=<?= $item['id'] ?>" class="btn btn-danger btn-sm">Alterar Status</a>
                     </td>
                 </tr>
             <?php endforeach; ?>

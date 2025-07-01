@@ -45,7 +45,7 @@ try {
     // Verifica o total de registros encontrados
     $totalRegistros = count($dados);
     session_start();
-    if ($_SESSION["permissao"]  === 5 || $_SESSION["permissao"] === 1) {
+    if ($_SESSION["permissao"] > 0) {
         foreach ($dados as $linha) {
 
 

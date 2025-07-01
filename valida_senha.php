@@ -33,6 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 session_start();
                 // Armazenando informações na sessão
                 $_SESSION["id_atual"] = $dados["id"];
+                $_SESSION["RE"] = $dados["RE"];
+
                 require_once("./consultapermissao.php");
                 if ($_SESSION['permissao'] > 0) {
 

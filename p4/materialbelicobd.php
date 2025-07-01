@@ -1,4 +1,3 @@
-
 <?php
 
 require_once("../conexao/conexao.php");
@@ -7,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!isset($_POST['tipo_tabela'])) {
         die("Erro: Tipo de tabela não informado.");
     }
-    var_dump($_POST);
+    
     $tabelas = [
         1 => "p4_armas",
         2 => "p4_coletes",
@@ -89,15 +88,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $conexao->commit();
-        if( $tipoTabela === "9"){
-        header("location:./motomecmenu.php");
-
-
+        if ($tipoTabela === "9") {
+            header("location:./motomecmenu.php");
+        } else {
+            header("location:./estoque.php");
+        }
+    } catch (PDOException $e) {
+        $conexao->rollBack();
         
-        }else{
-        header("location:./estoque.php");
-    }
- } catch (Exception $e) {
+        // Verifica se é um erro de violação de chave estrangeira
+        if ($e->getCode() == '23000') {
+            // Armazena a mensagem de erro na sessão
+            session_start();
+            $_SESSION['erro'] = "Erro: Por favor, preencha todos os campos obrigatórios corretamente.";
+            
+            // Redireciona de volta para a página anterior
+            header("Location: " . $_SERVER['HTTP_REFERER']);
+            exit();
+        } else {
+            // Outros tipos de erro
+            echo "Erro: " . $e->getMessage();
+        }
+    } catch (Exception $e) {
         $conexao->rollBack();
         echo "Erro: " . $e->getMessage();
     }

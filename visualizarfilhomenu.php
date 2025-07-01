@@ -18,9 +18,18 @@
     <div class="menuicon">
         <div class="img"></div>
         <ul>
-            <li><a href="./visualizarfilho.php"><i class="fas fa-clipboard-list"></i> Visualizar</a></li>
-            <li><a href="./cadastrofilho.php"><i class="fas fa-clipboard-list"></i> Cadastrar</a></li>
-            <li><a href="./inicial.php"><i class="fas fa-sign-out-alt"></i> voltar</a></li>
+         <li><a href="./visualizarfilho.php"><i class="fas fa-clipboard-list"></i> Visualizar</a></li>
+         
+         <?php
+        
+        if ($_SESSION['permissao'] === 1 ) {
+            
+       echo' <li><a href="./cadastrofilho.php"><i class="fas fa-clipboard-list"></i> Cadastrar</a></li>';
+        }
+        ?>
+         
+         
+         <li><a href="./inicial.php"><i class="fas fa-sign-out-alt"></i> voltar</a></li>
         </ul>
     </div>
 </body>

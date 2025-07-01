@@ -17,15 +17,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Sanitização dos inputs
     $nomeCurso = filter_input(INPUT_POST, 'nome_do_curso', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
-    $dtInicio = filter_input(INPUT_POST, 'dt_inicio', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
     $dtTermino = filter_input(INPUT_POST, 'dt_termino', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY);
 
     // Verifica se há pelo menos um curso preenchido
     if (is_array($nomeCurso) && !empty(array_filter($nomeCurso))) {
 
         // Prepara a query de inserção no banco de dados
-        $sql = "INSERT INTO p1cursos (id_p1, NomeCurso, DtInicio, DtTermino) 
-                VALUES (:id_p1, :NomeCurso, :DtInicio, :DtTermino)";
+        $sql = "INSERT INTO p1cursos (id_p1, NomeCurso, AnoConclusao) 
+                VALUES (:id_p1, :NomeCurso,:DtTermino)";
         $stmt = $conexao->prepare($sql);
 
         // Itera sobre os cursos enviados
@@ -40,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 // Atribui os valores para os parâmetros
                 $stmt->bindParam(':id_p1', $_Atualcad);
                 $stmt->bindParam(':NomeCurso', $nome);
-                $stmt->bindParam(':DtInicio', $inicio);
                 $stmt->bindParam(':DtTermino', $termino);
                 try {
                     // Executa a inserção para cada curso
@@ -66,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: ./visualizacao.php");
         } 
         else {     
-            header("Location: ./inicial.php");
+            header("Location: ./index.php");
         }
         exit();
     }

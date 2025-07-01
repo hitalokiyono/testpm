@@ -15,44 +15,36 @@ try {
 
     // Define a base da consulta SQL
     $comandoSQL = "
-        select 
-p1.id,
- p1.NomeCompleto,
- p1.RE,
- p1cursos.id_curso,
- p1cursos.NomeCurso,
- p1cursos.AnoConclusao
-from  p1
-inner join p1cursos on p1cursos.id_p1 = p1.id
-
+        SELECT 
+            p1.id,
+            p1.NomeCompleto,
+            p1.RE,
+            p1cursos.id_curso,
+            p1cursos.NomeCurso,
+            p1cursos.AnoConclusao
+        FROM p1
+        INNER JOIN p1cursos ON p1cursos.id_p1 = p1.id
     ";
 
     // Verifica a permissão do usuário
-    if ($_SESSION['permissao'] == 5) {
-        // Se for 5, busca todos os registros
+    if ($_SESSION['permissao'] >  1) {
+        // Se for 5, busca todos os registros com termo
         $comandoSQL .= " WHERE (p1.NomeCompleto LIKE :termo OR p1.RE LIKE :termo)";
+        $stmt = $conexao->prepare($comandoSQL);
+        $stmt->bindValue(':termo', '%' . $termo . '%', PDO::PARAM_STR);
     } else {
         // Caso contrário, busca apenas os filhos do usuário logado
-        $comandoSQL .= " WHERE p1filhos.id_p1 = :id AND (p1.NomeCompleto LIKE :termo OR p1.RE LIKE :termo)";
+        $comandoSQL .= " WHERE p1.id = :id";
+        $stmt = $conexao->prepare($comandoSQL);
+        $stmt->bindValue(':id', $_SESSION["id_atual"], PDO::PARAM_INT);
     }
 
     // Adiciona ordenação e limite
     $comandoSQL .= " ORDER BY p1.NomeCompleto ASC LIMIT $limite";
 
-    // Prepara a consulta
-    $stmt = $conexao->prepare($comandoSQL);
-    $stmt->bindValue(':termo', '%' . $termo . '%', PDO::PARAM_STR);
-
-    // Se a permissão não for 5, passa o ID do usuário
-    if ($_SESSION['permissao'] != 5) {
-        $stmt->bindValue(':id', $_SESSION["id_atual"], PDO::PARAM_INT);
-    }
-
     // Executa a consulta
     $stmt->execute();
-
-    // Pega os dados em formato de matriz
-    $dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+$dados = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Verifica o total de registros encontrados
     $totalRegistros = count($dados);
@@ -72,6 +64,7 @@ inner join p1cursos on p1cursos.id_p1 = p1.id
       </td>";
         echo "</tr>";
     }
+    // Restante do seu código...
 } catch (PDOException $erro) {
     echo "<tr><td colspan='6' align='center'>Erro ao realizar a busca: " . $erro->getMessage() . "</td></tr>";
 }

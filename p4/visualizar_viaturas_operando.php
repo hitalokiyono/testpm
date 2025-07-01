@@ -166,6 +166,17 @@ max-height : 100px;
     .btn-filtrar:hover {
         background-color: #0056b3;
     }
+    @media (max-width: 1300px) {
+    .table th, .table td {
+        padding: 0.2rem 0.3rem;
+        font-size: 0.75rem;
+    }
+    
+    .btn-sm {
+        padding: 0.2rem 0.3rem;
+        font-size: 0.7rem;
+    }
+}
     /* Mantenha seus outros estilos existentes... */
 </style>
 
@@ -269,7 +280,7 @@ $viaturas = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
     </div>
 
-    <table class="table table-striped table-bordered table-hover">
+ <table class="table table-striped table-bordered table-hover table-sm">
        <thead>
         <tr>
             <th>Prefixo</th>
