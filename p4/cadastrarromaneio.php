@@ -151,7 +151,11 @@ body,html {
 
 <body>
 
-<?php require_once("./menu.php"); ?>
+<?php require_once("./menu.php"); 
+
+
+
+?>
 
 <h1 class="titulo">Cadastro de  romaneio</h1>
 
@@ -209,7 +213,13 @@ body,html {
                     continue;
                 }
             
-                echo "<label for='$nomeCampo'>$nomeCampo</label>";
+
+            if ($nomeCampo === 'numerodepatrimonio' || $nomeCampo === 'numerodeserie'|| $nomeCampo === 'Status'||  $nomeCampo === 'id_pm'  ) {
+      
+                  
+                }
+                else{
+                echo "<label for='$nomeCampo'>$nomeCampo</label>";}
             
                 if ($nomeCampo === 'idModelo') {
                     echo "<select name='$nomeCampo' id='$nomeCampo'>";
@@ -218,7 +228,13 @@ body,html {
                         echo "<option value='{$modelo['idModelo']}'>{$modelo['modelo']}</option>";
                     }
                     echo "</select><br>";
-                } elseif ($nomeCampo === 'id_tamanho') { // Certifique-se de que 'idMoo' está correto
+                }  elseif ($nomeCampo === 'numerodepatrimonio' || $nomeCampo === 'id_pm' || $nomeCampo === 'numerodeserie' ) {
+      
+                  
+                }
+                
+                
+                elseif ($nomeCampo === 'id_tamanho') { // Certifique-se de que 'idMoo' está correto
                     echo "<select name='id_tamanho' id='id_tamanho'>";
                     echo "<option value=''>Selecione um modelo</option>";
                     foreach ($tamanhos as $tamanho) {
@@ -229,28 +245,7 @@ body,html {
                     echo "<input type='text' name='$nomeCampo' id='$nomeCampo'><br>";
                 }
             }
-            
-
-            // Campo idStatus como select
-            echo "<label for='idStatus'>Status</label>";
-            echo "<select name='idStatus' id='idStatus' required>";
-            echo "<option value=''>Selecione um status</option>";
-            foreach ($statusList as $status) {
-                echo "<option value='{$status['idStatus']}'>{$status['estado']}</option>";
-            }
-            echo "</select><br>";
-
-            // Campo de local de compra
-            echo "<label for='idLocComp'>Local</label>";
-            echo "<select name='idLocComp' id='idLocComp' required>";
-            echo "<option value=''>Selecione um local</option>";
-            foreach ($locaisComplementos as $local) {
-                $valor = $local['idLocComp'];
-                $descricao = "{$local['descricaolocal']} - {$local['descricaocomplemento']}";
-                echo "<option value='$valor'>$descricao</option>";
-            }
-            echo "</select><br>";
-
+       
             echo "<button type='submit'>Salvar</button>";
             echo "</form>";
             ?>

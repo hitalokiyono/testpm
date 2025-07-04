@@ -23,7 +23,9 @@ if (isset($_POST['tipo_tabela'])) {
     $nomeTabela = $tabelas[$tipoTabela];
 
     // Buscar os modelos automaticamente pela categoria
-    $sqlModelos = "SELECT idModelo, modelo FROM p4_modelos WHERE categoria = :categoria";
+    $sqlModelos = "SELECT mo.idModelo,mo.modelo as modelo ,ma.marca as marca FROM p4_modelos as mo
+    inner join p4_marcas as ma on ma.idMarca = mo.idMarca
+    WHERE categoria = :categoria";
     $stmtModelos = $conexao->prepare($sqlModelos);
     $stmtModelos->bindParam(':categoria', $tipoTabela, PDO::PARAM_INT);
     $stmtModelos->execute();
@@ -38,6 +40,13 @@ if (isset($_POST['tipo_tabela'])) {
     $stmtStatus = $conexao->prepare($sqlStatus);
     $stmtStatus->execute();
     $statusList = $stmtStatus->fetchAll(PDO::FETCH_ASSOC);
+
+     // Buscar REs da tabela p1
+    $sqlRE = "SELECT id,RE FROM p1";
+    $stmtRE = $conexao->prepare($sqlRE);
+    $stmtRE->execute();
+    $reList = $stmtRE->fetchAll(PDO::FETCH_ASSOC);
+
 
     // Buscar locais de compra com JOIN para trazer os nomes completos
     $sqlLocComp = "SELECT lc.idLocComp, l.descricaolocal, c.descricaocomplemento 
@@ -66,7 +75,10 @@ if (isset($_POST['tipo_tabela'])) {
             $primeiroCampo = false;
             continue;
         }
-
+elseif ($nomeCampo === 'id_pm') {
+           continue;
+        }
+        
 
         if( $tabelas[$tipoTabela] === "p4_municoes" && $nomeCampo === 'numerodepatrimonio' ){
             echo "<label for='$nomeCampo'>lote</label>";
@@ -78,7 +90,7 @@ if (isset($_POST['tipo_tabela'])) {
             echo "<select name='$nomeCampo' id='$nomeCampo'>";
             echo "<option value=''>Selecione um modelo</option>";
             foreach ($modelos as $modelo) {
-                echo "<option value='{$modelo['idModelo']}'>{$modelo['modelo']}</option>";
+             echo "<option value='{$modelo['idModelo']}'>" . $modelo['modelo']  . ' ' . $modelo['marca'] . "</option>";
             }
             echo "</select><br>";
         } elseif ($nomeCampo === 'id_tamanho') {
@@ -98,7 +110,12 @@ if (isset($_POST['tipo_tabela'])) {
         
         } elseif ($nomeCampo === 'validade') {
             echo "<input type='date' name='$nomeCampo' id='$nomeCampo'><br>";
-        } else {
+        }
+        elseif ($nomeCampo === 'id_pm') {
+           
+        }
+        
+        else {
             echo "<input type='text' name='$nomeCampo' id='$nomeCampo'><br>";
         }
     }
@@ -112,7 +129,16 @@ if (isset($_POST['tipo_tabela'])) {
     }
     echo "</select><br>";
 
-    // Campo de local de compra
+   if ($tipoTabela == 1 || $tipoTabela == 2 || $tipoTabela == 6) {
+    echo "<label for='idRE'>RE</label>";
+    echo "<select name='id_pm' id='id_pm' required>";
+    echo "<option value=''>Selecione um RE</option>";
+    foreach ($reList as $re) {
+        echo "<option value='{$re['id']}'>{$re['RE']}</option>";
+    }
+    echo "</select><br>";
+}
+    else{    
     echo "<label for='idLocComp'>Local </label>";
     echo "<select name='idLocComp' id='idLocComp' required>";
     echo "<option value=''>Selecione um local</option>";
@@ -122,7 +148,7 @@ if (isset($_POST['tipo_tabela'])) {
         echo "<option value='$valor'>$descricao</option>";
     }
     echo "</select><br>";
-
+    }
     echo "<button type='submit'>Salvar</button>";
     echo "</form>";
 } else {

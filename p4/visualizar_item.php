@@ -7,7 +7,8 @@ try {
 
     $tabelas = [
         'p4_armas' => [
-            'fields' => 'inv.id, inv.numerodepatrimonio, inv.idLocComp, inv.idStatus, inv.idTipo_tabela, a.*, mo.*, st.*, lo.*, ma.*, ti.*, loc.*, locc.*',
+            'fields' => '  p1.RE,
+   p1.NomeCompleto,inv.id, inv.numerodepatrimonio, inv.idLocComp, inv.idStatus, inv.idTipo_tabela, a.*, mo.*, st.*, lo.*, ma.*, ti.*, loc.*, locc.*',
             'joins' => 'INNER JOIN p4_armas AS a ON a.numerodepatrimonio = inv.numerodepatrimonio
                         INNER JOIN p4_modelos AS mo ON mo.idModelo = a.idModelo
                         INNER JOIN p4_status AS st ON st.idStatus = inv.idStatus
@@ -15,11 +16,13 @@ try {
                         INNER JOIN p4_local AS loc ON loc.idLocal = lo.idLocal
                         INNER JOIN p4_complemento AS locc ON locc.idComplemento = lo.idComplemento
                         INNER JOIN p4_marcas AS ma ON ma.idMarca = mo.idMarca
-                        INNER JOIN p4_tipos AS ti ON ti.id = mo.idTipo',
+                        INNER JOIN p4_tipos AS ti ON ti.id = mo.idTipo
+                        inner join p1 on p1.id = a.id_pm',
             'where' => 'a.numerodepatrimonio = :idpatrimonio'
         ],
         'p4_coletes' => [
-            'fields' => 'inv.id, inv.numerodepatrimonio, inv.idLocComp, inv.idStatus, inv.idTipo_tabela, c.*, mo.*, st.*, lo.*, ma.*, ti.*, loc.*, locc.*',
+            'fields' => '  p1.RE,
+   p1.NomeCompleto,inv.id, inv.numerodepatrimonio, inv.idLocComp, inv.idStatus, inv.idTipo_tabela, c.*, mo.*, st.*, lo.*, ma.*, ti.*, loc.*, locc.*',
             'joins' => 'INNER JOIN p4_coletes AS c ON c.numerodepatrimonio = inv.numerodepatrimonio
                         INNER JOIN p4_modelos AS mo ON mo.idModelo = c.idModelo
                         INNER JOIN p4_status AS st ON st.idStatus = inv.idStatus
@@ -27,7 +30,8 @@ try {
                         INNER JOIN p4_local AS loc ON loc.idLocal = lo.idLocal
                         INNER JOIN p4_complemento AS locc ON locc.idComplemento = lo.idComplemento
                         INNER JOIN p4_marcas AS ma ON ma.idMarca = mo.idMarca
-                        INNER JOIN p4_tipos AS ti ON ti.id = mo.idTipo',
+                        INNER JOIN p4_tipos AS ti ON ti.id = mo.idTipo
+                        inner join p1 on p1.id = c.id_pm',
             'where' => 'c.numerodepatrimonio = :idpatrimonio'
         ],
         'p4_tpd' => [
@@ -67,7 +71,8 @@ try {
             'where' => 'taser.numerodepatrimonio = :idpatrimonio'
         ],
         'p4_algemas' => [
-            'fields' => 'inv.id, inv.numerodepatrimonio, inv.idLocComp, inv.idStatus, inv.idTipo_tabela, algemas.*, mo.*, st.*, lo.*, ma.*, ti.*, loc.*, locc.*',
+            'fields' => 'inv.id, inv.numerodepatrimonio, inv.idLocComp, inv.idStatus, inv.idTipo_tabela, algemas.*, mo.*, st.*, lo.*, ma.*, ti.*, loc.*,  p1.RE,
+   p1.NomeCompleto, locc.*',
             'joins' => 'INNER JOIN p4_algemas AS algemas ON algemas.numerodepatrimonio = inv.numerodepatrimonio
                         INNER JOIN p4_modelos AS mo ON mo.idModelo = algemas.idModelo
                         INNER JOIN p4_status AS st ON st.idStatus = inv.idStatus
@@ -75,7 +80,8 @@ try {
                         INNER JOIN p4_local AS loc ON loc.idLocal = lo.idLocal
                         INNER JOIN p4_complemento AS locc ON locc.idComplemento = lo.idComplemento
                         INNER JOIN p4_marcas AS ma ON ma.idMarca = mo.idMarca
-                        INNER JOIN p4_tipos AS ti ON ti.id = mo.idTipo',
+                        INNER JOIN p4_tipos AS ti ON ti.id = mo.idTipo
+                         inner join p1 on p1.id = algemas.id_pm',
             'where' => 'algemas.numerodepatrimonio = :idpatrimonio'
         ],
         'p4_ht' => [

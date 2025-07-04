@@ -145,20 +145,9 @@ INNER JOIN p4_tipos AS ti ON ti.id = mo.idTipo
                 echo "<td>{$row['dtSaida']}</td>"; // Exibe a data de saída
             }
 
-            // Exibir os botões apenas se o item não estiver operando
-            if ($row['estado'] == 'Operando' && $row['dtSaida'] == null  &&  $_SESSION["permissao"] == 5 ) {
-                echo "<td>
-                 
-                
-                
-                   <button class='btn btn-warning' onclick='darBaixa(" . $row["inventario_id"] . ", " . $row["id_controle"] . ")'>Dar Baixa</button>
-              </td>";
-                }
-              elseif ($row['estado'] == 'Baixado' &&  $_SESSION["permissao"] == 5 ) {
-                echo "<td>      
-              <button class='btn btn-success' onclick='alocar()'>Alocar item</button>
-
-              </td>";
+          
+              if ($row['estado'] !== 'fora' &&  $_SESSION["permissao"] >4  ) {
+                echo "<td>   <button class='btn btn-warning' onclick='darBaixa(" . $row["inventario_id"] . ", " . $row["id_controle"] . ")'>Dar Baixa</button>     </td>";
             } else {
                 echo "<td></td>";
             } 

@@ -218,12 +218,15 @@ function fecharPopup2() {
             }
 
             if ($_SESSION['permissao'] == 0) {
+                 echo '<li><a href="./p4/cadastrarromaneio.php"><i class="fas fa-search"></i> cadastrar romaneio </a></li>';
              echo '<li><a href="./usuariovisualizacao.php"><i class="fas fa-search"></i> VISUALIZAR</a></li>';
                echo '<li><a href="./p4/consultarpm.php"><i class="fas fa-clipboard-list"></i> consultar itens em romaneio</a></li>';
                 echo '<li><a href="./cadastrocursomenu.php"><i class="fas fa-book"></i> VISUALIZAR CURSO</a></li>';
                 echo '<li><a href="./visualizarfilhomenu.php"><i class="fas fa-child"></i> VISUALIZAR FILHO</a></li>';
         
             } else if ($_SESSION['permissao'] > 0 && $_SESSION['permissao'] < 4) {
+              
+                echo '<li><a href="./p4/cadastrarromaneio.php"><i class="fas fa-search"></i> cadastrar romaneio </a></li>';
                 echo '<li><a href="./visualizacao.php"><i class="fas fa-search"></i> VISUALIZAR</a></li>';
                 echo '<li><a href="./cadastrocursomenu.php"><i class="fas fa-book"></i> VISUALIZAR CURSO</a></li>';
                 echo '<li><a href="./visualizarfilhomenu.php"><i class="fas fa-child"></i> VISUALIZAR FILHO</a></li>';

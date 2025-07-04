@@ -36,7 +36,7 @@ else if($_SESSION["permissao"] < 4){
 <div class="menuicon">
 <ul>
     <li>
-        <a href="./romaneio.php"><i class="fas fa-truck-loading"></i> Romaneio PM</a>
+        <a href="./cadastrarromaneio.php"><i class="fas fa-truck-loading"></i> Romaneio PM</a>
     </li>
 
     <li>

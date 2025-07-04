@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $tipoTabela = $_POST['tipo_tabela'];
 
+    var_dump( $tipoTabela);
     if (!isset($tabelas[$tipoTabela])) {
         die("Erro: Tabela inválida!");
     }
@@ -31,16 +32,48 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     try {
         $conexao->beginTransaction();
 
+        if ($tipoTabela == 1 || $tipoTabela == 2 || $tipoTabela == 6) {
+                  var_dump($_POST['id_pm']);
+        }
+        // Gera número de patrimônio aleatório se for romaneio (tipo 10)
+        if($tipoTabela == 10) {
+            // Gera uma string aleatória para o número de patrimônio
+            $numeroPatrimonio = 'ROM-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 8));
+            
+            // Inicia a sessão se não estiver iniciada
+            if(session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            $id_pm  =  $_SESSION['id_atual']; 
+        } else {
+            $numeroPatrimonio = $_POST['numerodepatrimonio'];
+        }
+
         // Inserindo primeiro na tabela p4_inventario
         $sqlInventario = "INSERT INTO p4_inventario (numerodepatrimonio, idLocComp, idStatus, idTipo_tabela) 
                           VALUES (:numerodepatrimonio, :idLocComp, :idStatus, :idTipo_tabela)";
         $stmtInventario = $conexao->prepare($sqlInventario);
         $stmtInventario->execute([
-            ':numerodepatrimonio' => $_POST['numerodepatrimonio'],
-            ':idLocComp' => $_POST['idLocComp'],
-            ':idStatus' => $_POST['idStatus'],
+            ':numerodepatrimonio' => $numeroPatrimonio,
+            ':idLocComp' => $_POST['idLocComp']  ?? 1,
+            ':idStatus' => $_POST['idStatus'] ?? 1,
             ':idTipo_tabela' => $tipoTabela
         ]);
+$idInventario = $conexao->lastInsertId(); // Pega o ID recém-inserido
+
+if ($tipoTabela == 10) {
+    $dados['id_pm'] = $id_pm;
+    $dados['numerodepatrimonio'] = $numeroPatrimonio;
+
+    // Inserção em p4_controleinventario
+    $sqlControle = "INSERT INTO p4_controleinventario (idPm, idInventario, dtEntrada) 
+                    VALUES (:idPm, :idInventario, NOW())";
+    $stmtControle = $conexao->prepare($sqlControle);
+    $stmtControle->execute([
+        ':idPm' => $id_pm,
+        ':idInventario' => $idInventario
+    ]);
+}
 
         // Obtendo os campos da tabela específica
         $sqlDescribe = "DESCRIBE $nomeTabela";
@@ -76,6 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
+        if ($tipoTabela == 10) {
+    $dados['id_pm'] = $id_pm;
+    $dados['numerodepatrimonio'] = $numeroPatrimonio;
+}
+
+
         if (!empty($dados)) {
             $colunas = implode(", ", array_keys($dados));
             $placeholders = implode(", ", array_fill(0, count($dados), "?"));
@@ -90,13 +129,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $conexao->commit();
         if ($tipoTabela === "9") {
             header("location:./motomecmenu.php");
-        } else {
+        } 
+        elseif ($tipoTabela === "10") {
+            header("location:../inicial.php");
+        }else {
             header("location:./estoque.php");
         }
     } catch (PDOException $e) {
         $conexao->rollBack();
         
-        // Verifica se é um erro de violação de chave estrangeira
+       // Verifica se é um erro de violação de chave estrangeira
         if ($e->getCode() == '23000') {
             // Armazena a mensagem de erro na sessão
             session_start();
